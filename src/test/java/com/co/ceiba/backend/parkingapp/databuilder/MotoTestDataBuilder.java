@@ -26,7 +26,7 @@ public class MotoTestDataBuilder {
 		return new Moto(placa, cilindraje);
 	}
 	
-	public static MotoTestDataBuilder anMoto() {
+	public static MotoTestDataBuilder aMoto() {
 		return new MotoTestDataBuilder();
 	}
 	

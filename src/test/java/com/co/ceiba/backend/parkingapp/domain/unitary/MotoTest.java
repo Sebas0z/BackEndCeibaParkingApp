@@ -1,7 +1,7 @@
 package com.co.ceiba.backend.parkingapp.domain.unitary;
 
 import static org.junit.Assert.assertEquals;
-import static com.co.ceiba.backend.parkingapp.databuilder.MotoTestDataBuilder.anMoto;
+import static com.co.ceiba.backend.parkingapp.databuilder.MotoTestDataBuilder.aMoto;
 
 import org.junit.Test;
 
@@ -13,7 +13,7 @@ public class MotoTest {
 	public void crearMotoTest() {
 		
 		// Arrange & Act
-		Moto moto = anMoto().withPlaca("YUI33M").withCilindraje(125).build();
+		Moto moto = aMoto().withPlaca("YUI33M").withCilindraje(125).build();
 		// Assert
 		assertEquals("YUI33M", moto.getPlaca());
 		assertEquals(125, moto.getCilindraje());

@@ -19,7 +19,7 @@ public class CarroTestDataBuilder {
 		return new Carro(placa);
 	}
 	
-	public static CarroTestDataBuilder anCarro() {
+	public static CarroTestDataBuilder aCarro() {
 		return new CarroTestDataBuilder();
 	}
 	
