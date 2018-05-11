@@ -1,27 +1,91 @@
 package com.co.ceiba.backend.parkingapp.domain.unitary;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static com.co.ceiba.backend.parkingapp.databuilder.CarroTestDataBuilder.aCarro;
 
 import org.junit.Test;
 
-import com.co.ceiba.backend.parkingapp.databuilder.CarroTestDataBuilder;
-import com.co.ceiba.backend.parkingapp.domain.Carro;
+import com.co.ceiba.backend.parkingapp.domain.ParqueoCarro;
+import com.co.ceiba.backend.parkingapp.domain.ParqueoMoto;
 import com.co.ceiba.backend.parkingapp.domain.Vigilante;
 
 public class VigilanteTest {
 	
+	private static final String PLACA = "BOS16X";
+	
 	@Test
-	public void registrarVehiculo() {
+	public void registrarEntradaCarroTest() {
 		
-		// arrange
-		Carro vehiculo = aCarro().build();
+		// Arrange
 		Vigilante vigilante = new Vigilante();
-		// act
-		boolean registrado = vigilante.registrarVehiculo(vehiculo);
-		// assert
-		assertTrue(registrado);
+		// Act
+		ParqueoCarro parqueoCarro = vigilante.registrarParqueoCarro(PLACA);
+		// Assert
+		assertEquals(PLACA, parqueoCarro.getCarro().getPlaca());
 		
+	}
+	
+	@Test
+	public void registrarEntradaMotoTest() {
+		
+		// Arrange
+		Vigilante vigilante = new Vigilante();
+		// Act
+		ParqueoMoto parqueoMoto = vigilante.registrarParqueoMoto(PLACA, 125);
+		// Assert
+		assertEquals(PLACA, parqueoMoto.getMoto().getPlaca());
+	}
+	
+	@Test
+	public void registrarMasdeVeinteCarrosTest() {
+		
+		// Arrange
+		// Act
+		// Assert
+		assertTrue(true);
+		
+	}
+	
+	@Test
+	public void registrarMasdeDiezMotosTest() {
+		
+		// Arrange
+		// Act
+		// Assert
+		assertTrue(true);
+		
+	}
+	
+	@Test
+	public void registrarCarroConPlacaInicialATest() {
+		// Arrange
+		// Act
+		// Assert
+		assertTrue(true);
+	}
+	
+	@Test
+	public void registrarMotoConPlacaInicialATest() {
+		// Arrange
+		// Act
+		// Assert
+		assertTrue(true);
+	}
+	
+	@Test
+	public void cobrarParqueoCarroMenosdeNueveHorasTest() {
+		// Arrange
+		// Act
+		// Assert
+		assertTrue(true);
+	}
+	
+	@Test
+	public void cobrarParqueoMotoMenosdeNueveHorasTest() {
+		// Arrange
+		// Act
+		// Assert
+		assertTrue(true);
 	}
 
 }
