@@ -12,8 +12,8 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
-//apply plugin: 'org.springframework.boot'
-//apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 group = 'com.co.ceiba.backend.parkingapp'
 version = '0.0.1-SNAPSHOT'
@@ -25,9 +25,9 @@ repositories {
 
 
 dependencies {
-	//compile('org.springframework.boot:spring-boot-starter-data-jpa')
-	//compile('org.springframework.boot:spring-boot-starter-web')
-	//runtime('com.h2database:h2')
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('org.springframework.boot:spring-boot-starter-web')
+	runtime('com.h2database:h2')
 	//testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('junit:junit:4.12')
 }

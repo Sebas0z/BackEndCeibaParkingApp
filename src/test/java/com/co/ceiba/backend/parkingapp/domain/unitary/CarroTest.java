@@ -16,12 +16,11 @@ public class CarroTest {
 	
 	@Test
 	public void crearVehiculoTest() {
-		
 		// Arrange & Act
 		Carro carro = aCarro().withPlaca("ASD10D").build();
-		// Assert
-		assertEquals("ASD10D", carro.getPlaca());
 		
+		// Assert
+		assertEquals("ASD10D", carro.getPlaca());	
 	}
 
 }

@@ -29,7 +29,5 @@ public class MotoTestDataBuilder {
 	public static MotoTestDataBuilder aMoto() {
 		return new MotoTestDataBuilder();
 	}
-	
-	
 
 }

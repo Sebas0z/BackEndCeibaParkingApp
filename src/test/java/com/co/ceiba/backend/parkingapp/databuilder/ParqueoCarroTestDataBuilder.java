@@ -2,8 +2,8 @@ package com.co.ceiba.backend.parkingapp.databuilder;
 
 import java.time.LocalDateTime;
 
-import com.co.ceiba.backend.parkingapp.domain.ParqueoCarro;
 import com.co.ceiba.backend.parkingapp.domain.Carro;
+import com.co.ceiba.backend.parkingapp.domain.ParqueoCarro;
 
 public class ParqueoCarroTestDataBuilder {
 	

@@ -21,11 +21,14 @@ public class ParqueoMotoTest {
 		// Arrange
 		Moto moto = aMoto().withPlaca(PLACA).withCilindraje(CILINDRAJE).build();
 		LocalDateTime ahora = LocalDateTime.now();
+		
 		// Act
 		ParqueoMoto parqueoMoto = aParqueoMoto().withMoto(moto).withFechaIngreso(ahora).build();
+		
 		// Assert
 		assertEquals(ahora, parqueoMoto.getFechaIngreso());
 		assertEquals(PLACA, parqueoMoto.getMoto().getPlaca());
 		assertEquals(CILINDRAJE, parqueoMoto.getMoto().getCilindraje());
 	}
+	
 }
