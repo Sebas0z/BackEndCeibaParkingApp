@@ -3,6 +3,9 @@ package com.co.ceiba.backend.parkingapp.domain.unitary;
 import static com.co.ceiba.backend.parkingapp.databuilder.CarroTestDataBuilder.aCarro;
 import static com.co.ceiba.backend.parkingapp.databuilder.ParqueaderoCarroTestDataBuilder.aParqueaderoCarro;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,6 +52,15 @@ public class ParqueaderoCarroServiceImplTest {
 		// Assert
 		assertEquals(parqueaderoCarro.getCarro().getPlaca(), parqueaderoCarroAgregado.getCarro().getPlaca());
 		assertEquals(parqueaderoCarro.getFechaIngreso(), parqueaderoCarroAgregado.getFechaIngreso());
+	}
+
+	@Test
+	public void obtenerTodos() {
+		// Arrange & Act
+		List<ParqueaderoCarro> listaParqueaderoCarro = parqueaderoCarroService.obtenerTodos();
+
+		// Assert
+		assertNotNull(listaParqueaderoCarro);
 	}
 
 }
