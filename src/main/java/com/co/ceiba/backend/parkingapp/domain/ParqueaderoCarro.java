@@ -2,11 +2,23 @@ package com.co.ceiba.backend.parkingapp.domain;
 
 import java.time.LocalDateTime;
 
-public class ParqueoCarro extends Parqueo {
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
+@Entity
+public class ParqueaderoCarro extends Parqueadero {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+
+	@OneToMany
 	private Carro carro;
 
-	public ParqueoCarro(Carro carro, LocalDateTime fechaIngreso) {
+	public ParqueaderoCarro(Carro carro, LocalDateTime fechaIngreso) {
 		super(fechaIngreso);
 		this.carro = carro;
 	}

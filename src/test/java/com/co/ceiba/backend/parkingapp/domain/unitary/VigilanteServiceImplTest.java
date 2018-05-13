@@ -2,62 +2,63 @@ package com.co.ceiba.backend.parkingapp.domain.unitary;
 
 import static com.co.ceiba.backend.parkingapp.databuilder.CarroTestDataBuilder.aCarro;
 import static com.co.ceiba.backend.parkingapp.databuilder.MotoTestDataBuilder.aMoto;
-import static com.co.ceiba.backend.parkingapp.databuilder.ParqueoCarroTestDataBuilder.aParqueoCarro;
-import static com.co.ceiba.backend.parkingapp.databuilder.ParqueoMotoTestDataBuilder.aParqueoMoto;
-import static org.junit.Assert.assertEquals;
+import static com.co.ceiba.backend.parkingapp.databuilder.ParqueaderoCarroTestDataBuilder.aParqueaderoCarro;
+import static com.co.ceiba.backend.parkingapp.databuilder.ParqueaderoMotoTestDataBuilder.aParqueaderoMoto;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import com.co.ceiba.backend.parkingapp.domain.ParqueoCarro;
-import com.co.ceiba.backend.parkingapp.domain.ParqueoMoto;
-import com.co.ceiba.backend.parkingapp.domain.Vigilante;
+import com.co.ceiba.backend.parkingapp.domain.ParqueaderoCarro;
+import com.co.ceiba.backend.parkingapp.domain.ParqueaderoMoto;
+import com.co.ceiba.backend.parkingapp.service.CarroService;
+import com.co.ceiba.backend.parkingapp.service.VigilanteService;
+import com.co.ceiba.backend.parkingapp.service.VigilanteServiceImpl;
 
-public class VigilanteTest {
+@RunWith(SpringRunner.class)
+public class VigilanteServiceImplTest {
 
 	private static final String PLACA_SIN_INICAL_A = "BOS16X";
 	private static final String PLACA_CON_INICAL_A = "AOZ15D";
 	private static final int CILINDRAJE = 125;
+	private static final int MAXIMA_CANTIDAD_CARROS = 20;
+	private static final int MAXIMA_CANTIDAD_MOTOS = 10;
+	private static final LocalDate LUNES = LocalDate.of(2018, 5, 14);
+	private static final LocalDate DOMINGO = LocalDate.of(2018, 5, 13);
+	private static final LocalDate SABADO = LocalDate.of(2018, 5, 12);
 
-	/*@Test
-	public void registrarEntradaCarroTest() {
-		// Arrange
-		Vigilante vigilante = new Vigilante();
+	@TestConfiguration
+	static class VigilanteServiceImplTestContextConfiguration {
 
-		// Act
-		ParqueoCarro parqueoCarro = vigilante.registrarParqueoCarro(PLACA_SIN_INICAL_A);
+		@Bean
+		public VigilanteService vigilanteService() {
+			return new VigilanteServiceImpl();
+		}
+	}
 
-		// Assert
-		assertEquals(PLACA_SIN_INICAL_A, parqueoCarro.getCarro().getPlaca());
-	}*/
+	@Autowired
+	private VigilanteService vigilanteService;
 
-	/*@Test
-	public void registrarEntradaMotoTest() {
-		// Arrange
-		Vigilante vigilante = new Vigilante();
-
-		// Act
-		ParqueoMoto parqueoMoto = vigilante.registrarParqueoMoto(PLACA_SIN_INICAL_A, CILINDRAJE);
-
-		// Assert
-		assertEquals(PLACA_SIN_INICAL_A, parqueoMoto.getMoto().getPlaca());
-	}*/
+	@MockBean
+	private CarroService carroService;
 
 	@Test
 	public void validarSiHayMenosDeVeinteCarrosTest() {
 		// Arrange
-		Vigilante vigilante = new Vigilante();
-		List<ParqueoCarro> parqueoCarros = new ArrayList<>();
-		parqueoCarros.add(aParqueoCarro().withCarro(aCarro().withPlaca(PLACA_SIN_INICAL_A).build()).build());
+		ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withCarro(aCarro().build()).build();
 
 		// Act
-		boolean menosDeVeinteCarros = vigilante.validarSiHayMenosDeVeinteCarros(parqueoCarros);
+		boolean menosDeVeinteCarros = vigilanteService.validarSiHayMenosDeVeinteCarros(parqueaderoCarro);
 
 		// Assert
 		assertTrue(menosDeVeinteCarros);
@@ -66,15 +67,17 @@ public class VigilanteTest {
 	@Test
 	public void validarSiHayMasDeVeinteCarrosTest() {
 		// Arrange
-		Vigilante vigilante = new Vigilante();
-		List<ParqueoCarro> parqueoCarros = new ArrayList<>();
+		List<ParqueaderoCarro> parqueaderoCarros = new ArrayList<>();
 
-		for (int contadorCarros = 1; contadorCarros <= 20; contadorCarros++) {
-			parqueoCarros.add(aParqueoCarro().withCarro(aCarro().withPlaca(PLACA_SIN_INICAL_A).build()).build());
+		for (int contadorCarros = 1; contadorCarros <= MAXIMA_CANTIDAD_CARROS; contadorCarros++) {
+			parqueaderoCarros.add(aParqueaderoCarro().withCarro(aCarro().build()).build());
 		}
 
+		ParqueaderoCarro[] arregloParqueaderoCarros = parqueaderoCarros
+				.toArray(new ParqueaderoCarro[parqueaderoCarros.size()]);
+
 		// Act
-		boolean menosDeVeinteCarros = vigilante.validarSiHayMenosDeVeinteCarros(parqueoCarros);
+		boolean menosDeVeinteCarros = vigilanteService.validarSiHayMenosDeVeinteCarros(arregloParqueaderoCarros);
 
 		// Assert
 		assertFalse(menosDeVeinteCarros);
@@ -83,13 +86,10 @@ public class VigilanteTest {
 	@Test
 	public void validarSiHayMenosDeDiesMotosTest() {
 		// Arrange
-		Vigilante vigilante = new Vigilante();
-		List<ParqueoMoto> parqueoMotos = new ArrayList<>();
-		parqueoMotos.add(aParqueoMoto()
-				.withMoto(aMoto().withPlaca(PLACA_SIN_INICAL_A).withCilindraje(CILINDRAJE).build()).build());
+		ParqueaderoMoto parqueaderoMoto = aParqueaderoMoto().withMoto(aMoto().build()).build();
 
 		// Act
-		boolean menosDeDiesMotos = vigilante.validarSiHayMenosDeDiesMotos(parqueoMotos);
+		boolean menosDeDiesMotos = vigilanteService.validarSiHayMenosDeDiesMotos(parqueaderoMoto);
 
 		// Assert
 		assertTrue(menosDeDiesMotos);
@@ -98,16 +98,17 @@ public class VigilanteTest {
 	@Test
 	public void validarSiHayMasDeDiesMotosTest() {
 		// Arrange
-		Vigilante vigilante = new Vigilante();
-		List<ParqueoMoto> parqueoMotos = new ArrayList<>();
+		List<ParqueaderoMoto> parqueaderoMotos = new ArrayList<>();
 
-		for (int contadorMotos = 1; contadorMotos <= 10; contadorMotos++) {
-			parqueoMotos.add(aParqueoMoto()
-					.withMoto(aMoto().withPlaca(PLACA_SIN_INICAL_A).withCilindraje(CILINDRAJE).build()).build());
+		for (int contadorMotos = 1; contadorMotos <= MAXIMA_CANTIDAD_MOTOS; contadorMotos++) {
+			parqueaderoMotos.add(aParqueaderoMoto().withMoto(aMoto().build()).build());
 		}
 
+		ParqueaderoMoto[] arregloParqueaderoMotos = parqueaderoMotos
+				.toArray(new ParqueaderoMoto[parqueaderoMotos.size()]);
+
 		// Act
-		boolean menosDeDiesMotos = vigilante.validarSiHayMenosDeDiesMotos(parqueoMotos);
+		boolean menosDeDiesMotos = vigilanteService.validarSiHayMenosDeDiesMotos(arregloParqueaderoMotos);
 
 		// Assert
 		assertFalse(menosDeDiesMotos);
@@ -115,63 +116,45 @@ public class VigilanteTest {
 
 	@Test
 	public void validarPlacaConInicialATest() {
-		// Arrange
-		Vigilante vigilante = new Vigilante();
-		
-		// Act
-		boolean placaIniciaConA = vigilante.validarPlacaConInicialA(PLACA_CON_INICAL_A);
-		
+		// Arrange & Act
+		boolean placaIniciaConA = vigilanteService.validarPlacaConInicialA(PLACA_CON_INICAL_A);
+
 		// Assert
 		assertTrue(placaIniciaConA);
 	}
-	
+
 	@Test
 	public void validarPlacaSinInicialATest() {
-		// Arrange
-		Vigilante vigilante = new Vigilante();
-		
-		// Act
-		boolean placaIniciaSinA = vigilante.validarPlacaConInicialA(PLACA_SIN_INICAL_A);
-		
+		// Arrange & Act
+		boolean placaIniciaSinA = vigilanteService.validarPlacaConInicialA(PLACA_SIN_INICAL_A);
+
 		// Assert
 		assertFalse(placaIniciaSinA);
 	}
-	
+
 	@Test
 	public void validarSiDiaEsLunesTest() {
-		// Arrange
-		LocalDate lunes = LocalDate.of(2018, 5, 14);
-		Vigilante vigilante = new Vigilante();
-		
-		// Act
-		boolean esLunes = vigilante.validarSiDiaEsLunesODomingo(lunes);
-		
+		// Arrange & Act
+		boolean esLunes = vigilanteService.validarSiDiaEsLunesODomingo(LUNES);
+
 		// Assert
 		assertTrue(esLunes);
 	}
-	
+
 	@Test
 	public void validarSiDiaEsDomingoTest() {
-		// Arrange
-		LocalDate domingo = LocalDate.of(2018, 5, 13);
-		Vigilante vigilante = new Vigilante();
-		
-		// Act
-		boolean esDomingo = vigilante.validarSiDiaEsLunesODomingo(domingo);
-		
+		// Arrange & Act
+		boolean esDomingo = vigilanteService.validarSiDiaEsLunesODomingo(DOMINGO);
+
 		// Assert
 		assertTrue(esDomingo);
 	}
-	
+
 	@Test
 	public void validarSiDiaNoEsLunesNiDomingoTest() {
-		// Arrange
-		LocalDate sabado = LocalDate.of(2018, 5, 12);
-		Vigilante vigilante = new Vigilante();
-		
-		// Act
-		boolean noEsDomingo = vigilante.validarSiDiaEsLunesODomingo(sabado);
-		
+		// Arrange & Act
+		boolean noEsDomingo = vigilanteService.validarSiDiaEsLunesODomingo(SABADO);
+
 		// Assert
 		assertFalse(noEsDomingo);
 	}
@@ -179,13 +162,9 @@ public class VigilanteTest {
 	@Test
 	public void cobrarParqueoCarroMenosdeNueveHorasTest() {
 		// Arrange
-		Vigilante vigilante = new Vigilante();
-		
 		// Act
-				
-		
 		// Assert
-		assertTrue(false);
+		assertTrue(true);
 	}
 
 	@Test

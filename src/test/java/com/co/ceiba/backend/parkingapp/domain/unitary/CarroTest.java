@@ -1,26 +1,23 @@
 package com.co.ceiba.backend.parkingapp.domain.unitary;
 
-import static org.junit.Assert.assertEquals;
 import static com.co.ceiba.backend.parkingapp.databuilder.CarroTestDataBuilder.aCarro;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.test.context.junit4.SpringRunner;
 
 import com.co.ceiba.backend.parkingapp.domain.Carro;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
 public class CarroTest {
-	
+
+	public static final String PLACA = "ASD10D";
+
 	@Test
 	public void crearVehiculoTest() {
 		// Arrange & Act
-		Carro carro = aCarro().withPlaca("ASD10D").build();
-		
+		Carro carro = aCarro().withPlaca(PLACA).build();
+
 		// Assert
-		assertEquals("ASD10D", carro.getPlaca());	
+		assertEquals(PLACA, carro.getPlaca());
 	}
 
 }

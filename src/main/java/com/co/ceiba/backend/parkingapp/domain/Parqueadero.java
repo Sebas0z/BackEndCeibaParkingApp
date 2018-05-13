@@ -2,11 +2,11 @@ package com.co.ceiba.backend.parkingapp.domain;
 
 import java.time.LocalDateTime;
 
-public abstract class Parqueo {
+public abstract class Parqueadero {
 
 	private LocalDateTime fechaIngreso;
 
-	public Parqueo(LocalDateTime fechaIngreso) {
+	public Parqueadero(LocalDateTime fechaIngreso) {
 		this.fechaIngreso = fechaIngreso;
 	}
 

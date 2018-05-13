@@ -9,14 +9,17 @@ import com.co.ceiba.backend.parkingapp.domain.Moto;
 
 public class MotoTest {
 	
+	public static final String PLACA = "YUI33M";
+	public static final int CILINDRAJE = 125;
+	
 	@Test
 	public void crearMotoTest() {
 		// Arrange & Act
-		Moto moto = aMoto().withPlaca("YUI33M").withCilindraje(125).build();
+		Moto moto = aMoto().withPlaca(PLACA).withCilindraje(CILINDRAJE).build();
 		
 		// Assert
-		assertEquals("YUI33M", moto.getPlaca());
-		assertEquals(125, moto.getCilindraje());
+		assertEquals(PLACA, moto.getPlaca());
+		assertEquals(CILINDRAJE, moto.getCilindraje());
 	}
 
 }
