@@ -12,21 +12,37 @@ import com.co.ceiba.backend.parkingapp.domain.Carro;
 import com.co.ceiba.backend.parkingapp.domain.ParqueaderoCarro;
 
 public class ParqueaderoCarroTest {
-	
+
 	private static final String PLACA = "COO01S";
-	
+
 	@Test
 	public void crearParqueaderoCarroTest() {
 		// Arrange
 		Carro carro = aCarro().withPlaca(PLACA).build();
 		LocalDateTime ahora = LocalDateTime.now();
-		
+
 		// Act
 		ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withCarro(carro).withFechaIngreso(ahora).build();
-		
+
 		// Assert
 		assertEquals(ahora, parqueaderoCarro.getFechaIngreso());
-		assertEquals(PLACA, parqueaderoCarro.getCarro().getPlaca());	
+		assertEquals(PLACA, parqueaderoCarro.getCarro().getPlaca());
+	}
+
+	@Test
+	public void ingresarFechaRetiroTest() {
+		// Arrange
+		Carro carro = aCarro().withPlaca(PLACA).build();
+		LocalDateTime ahora = LocalDateTime.now();
+		ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withCarro(carro).withFechaIngreso(ahora).build();
+
+		// Act
+		parqueaderoCarro.setFechaRetiro(ahora);
+
+		// Assert
+		assertEquals(ahora, parqueaderoCarro.getFechaIngreso());
+		assertEquals(PLACA, parqueaderoCarro.getCarro().getPlaca());
+		assertEquals(ahora, parqueaderoCarro.getFechaRetiro());
 	}
 
 }

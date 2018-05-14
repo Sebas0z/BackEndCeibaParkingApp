@@ -3,8 +3,8 @@ package com.co.ceiba.backend.parkingapp.domain.unitary;
 import static com.co.ceiba.backend.parkingapp.databuilder.MotoTestDataBuilder.aMoto;
 import static com.co.ceiba.backend.parkingapp.databuilder.ParqueaderoMotoTestDataBuilder.aParqueaderoMoto;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -56,12 +56,34 @@ public class ParqueaderoMotoServiceImplTest {
 	}
 
 	@Test
-	public void obtenerTodos() {
-		// Arrange & Act
-		List<ParqueaderoMoto> listaParqueaderoMoto = parqueaderoMotoService.obtenerTodos();
+	public void obtenerMotosParqueadasTest() {
+		// Arrange
+		Moto moto = aMoto().build();
+		ParqueaderoMoto parqueaderoMoto = aParqueaderoMoto().withMoto(moto).build();
+		List<ParqueaderoMoto> listParqueaderoMoto = new ArrayList<>();
+		listParqueaderoMoto.add(parqueaderoMoto);
+
+		Mockito.when(parqueaderoMotoRepository.findByFechaRetiroIsNull()).thenReturn(listParqueaderoMoto);
+
+		// Act
+		List<ParqueaderoMoto> parqueaderoMotoObtenidos = parqueaderoMotoService.obtenerMotosParqueadas();
 
 		// Assert
-		assertNotNull(listaParqueaderoMoto);
+		assertEquals(1, parqueaderoMotoObtenidos.size());
+	}
+
+	@Test
+	public void obtenerCMotoParqueadoTest() {
+		// Arrange
+		Moto moto = aMoto().build();
+		ParqueaderoMoto parqueaderoMoto = aParqueaderoMoto().withMoto(moto).build();
+		Mockito.when(parqueaderoMotoRepository.findByMotoAndFechaRetiroIsNull(moto)).thenReturn(parqueaderoMoto);
+
+		// Act
+		ParqueaderoMoto parqueaderoMotoObtenido = parqueaderoMotoService.obtenerMotoParqueada(moto);
+
+		// Assert
+		assertEquals(moto.getPlaca(), parqueaderoMotoObtenido.getMoto().getPlaca());
 	}
 
 }

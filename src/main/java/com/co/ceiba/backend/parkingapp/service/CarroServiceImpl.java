@@ -17,4 +17,9 @@ public class CarroServiceImpl implements CarroService {
 		return carroRepository.save(carro);
 	}
 
+	@Override
+	public Carro obtenerCarro(String placa) {
+		return carroRepository.findByPlaca(placa);
+	}
+
 }

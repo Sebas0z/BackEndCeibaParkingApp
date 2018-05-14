@@ -11,5 +11,9 @@ public interface VigilanteService {
 	public String validarYRegistrarIngresoMoto(String placa, int cilindraje, LocalDateTime dia);
 	
 	public String registrarIngresoMoto(String placa, int cilindraje, LocalDateTime dia);
+	
+	public String cobrarRetiroCarro(String placa, LocalDateTime dia);
+	
+	public String cobrarRetiroMoto(String placa, LocalDateTime dia);
 
 }

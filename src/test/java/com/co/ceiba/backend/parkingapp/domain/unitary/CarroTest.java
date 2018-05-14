@@ -12,7 +12,7 @@ public class CarroTest {
 	public static final String PLACA = "ASD10D";
 
 	@Test
-	public void crearVehiculoTest() {
+	public void crearCarroTest() {
 		// Arrange & Act
 		Carro carro = aCarro().withPlaca(PLACA).build();
 

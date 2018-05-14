@@ -3,8 +3,8 @@ package com.co.ceiba.backend.parkingapp.domain.unitary;
 import static com.co.ceiba.backend.parkingapp.databuilder.CarroTestDataBuilder.aCarro;
 import static com.co.ceiba.backend.parkingapp.databuilder.ParqueaderoCarroTestDataBuilder.aParqueaderoCarro;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -55,12 +55,34 @@ public class ParqueaderoCarroServiceImplTest {
 	}
 
 	@Test
-	public void obtenerTodos() {
-		// Arrange & Act
-		List<ParqueaderoCarro> listaParqueaderoCarro = parqueaderoCarroService.obtenerTodos();
+	public void obtenerCarrosParqueadosTest() {
+		// Arrange
+		Carro carro = aCarro().build();
+		ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withCarro(carro).build();
+		List<ParqueaderoCarro> listaParqueaderoCarro = new ArrayList<>();
+		listaParqueaderoCarro.add(parqueaderoCarro);
+
+		Mockito.when(parqueaderoCarroRepository.findByFechaRetiroIsNull()).thenReturn(listaParqueaderoCarro);
+
+		// Act
+		List<ParqueaderoCarro> parqueaderoCarroObtenidos = parqueaderoCarroService.obtenerCarrosParqueados();
 
 		// Assert
-		assertNotNull(listaParqueaderoCarro);
+		assertEquals(1, parqueaderoCarroObtenidos.size());
+	}
+
+	@Test
+	public void obtenerCarroParqueadoTest() {
+		// Arrange
+		Carro carro = aCarro().build();
+		ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withCarro(carro).build();
+		Mockito.when(parqueaderoCarroRepository.findByCarroAndFechaRetiroIsNull(carro)).thenReturn(parqueaderoCarro);
+
+		// Act
+		ParqueaderoCarro parqueaderoCarroObtenido = parqueaderoCarroService.obtenerCarroParqueado(carro);
+
+		// Assert
+		assertEquals(carro.getPlaca(), parqueaderoCarroObtenido.getCarro().getPlaca());
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.co.ceiba.backend.parkingapp.domain.unitary;
 
+import static com.co.ceiba.backend.parkingapp.databuilder.CarroTestDataBuilder.aCarro;
 import static com.co.ceiba.backend.parkingapp.databuilder.MotoTestDataBuilder.aMoto;
 import static org.junit.Assert.assertEquals;
 
@@ -12,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.co.ceiba.backend.parkingapp.domain.Carro;
 import com.co.ceiba.backend.parkingapp.domain.Moto;
 import com.co.ceiba.backend.parkingapp.reposity.MotoRepository;
 import com.co.ceiba.backend.parkingapp.service.MotoService;
@@ -47,6 +49,20 @@ public class MotoServiceImplTest {
 		// Assert
 		assertEquals(moto.getPlaca(), motoAgregado.getPlaca());
 		assertEquals(moto.getCilindraje(), motoAgregado.getCilindraje());
+
+	}
+
+	@Test
+	public void obtenerMoto() {
+		// Arrange
+		Moto moto = aMoto().build();
+		Mockito.when(motoService.obtenerMoto(moto.getPlaca())).thenReturn(moto);
+
+		// Act
+		Moto carroObtenido = motoService.obtenerMoto(moto.getPlaca());
+
+		// Assert
+		assertEquals(moto.getPlaca(), carroObtenido.getPlaca());
 
 	}
 

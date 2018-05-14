@@ -48,4 +48,18 @@ public class CarroServiceImplTest {
 		assertEquals(carro.getPlaca(), carroAgregado.getPlaca());
 	}
 
+	@Test
+	public void obtenerCarro() {
+		// Arrange
+		Carro carro = aCarro().build();
+		Mockito.when(carroService.obtenerCarro(carro.getPlaca())).thenReturn(carro);
+
+		// Act
+		Carro carroObtenido = carroService.obtenerCarro(carro.getPlaca());
+
+		// Assert
+		assertEquals(carro.getPlaca(), carroObtenido.getPlaca());
+
+	}
+
 }

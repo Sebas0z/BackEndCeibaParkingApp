@@ -1,6 +1,8 @@
 package com.co.ceiba.backend.parkingapp.service;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,7 @@ public class VigilanteServiceImpl implements VigilanteService {
 
 	@Override
 	public String validarYRegistrarIngresoCarro(String placa, LocalDateTime dia) {
-		List<ParqueaderoCarro> listaParqueaderoCarro = parqueaderoCarroService.obtenerTodos();
+		List<ParqueaderoCarro> listaParqueaderoCarro = parqueaderoCarroService.obtenerCarrosParqueados();
 		ParqueaderoCarro[] arregloParqueaderoCarro = listaParqueaderoCarro
 				.toArray(new ParqueaderoCarro[listaParqueaderoCarro.size()]);
 
@@ -58,7 +60,7 @@ public class VigilanteServiceImpl implements VigilanteService {
 
 	@Override
 	public String validarYRegistrarIngresoMoto(String placa, int cilindraje, LocalDateTime dia) {
-		List<ParqueaderoMoto> listaParqueaderoMoto = parqueaderoMotoService.obtenerTodos();
+		List<ParqueaderoMoto> listaParqueaderoMoto = parqueaderoMotoService.obtenerMotosParqueadas();
 		ParqueaderoMoto[] arregloParqueaderoMoto = listaParqueaderoMoto
 				.toArray(new ParqueaderoMoto[listaParqueaderoMoto.size()]);
 
@@ -81,6 +83,26 @@ public class VigilanteServiceImpl implements VigilanteService {
 				.agregarParqueaderoMoto(new ParqueaderoMoto(motoService.agregarMoto(new Moto(placa, cilindraje)), dia));
 
 		return "Moto registrado en el parqueadero";
+	}
+
+	@Override
+	public String cobrarRetiroCarro(String placa, LocalDateTime dia) {
+		Carro carro = carroService.obtenerCarro(placa);
+		ParqueaderoCarro parqueaderoCarro = parqueaderoCarroService.obtenerCarroParqueado(carro);
+
+		long hours = ChronoUnit.HOURS.between(parqueaderoCarro.getFechaIngreso(), dia);
+		
+		// horas / 24
+		// trunc resultado para dias
+		// los decimales se multiplican por 24 para obtener las horas y listo
+		
+		return "1000";
+	}
+
+	@Override
+	public String cobrarRetiroMoto(String placa, LocalDateTime dia) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
