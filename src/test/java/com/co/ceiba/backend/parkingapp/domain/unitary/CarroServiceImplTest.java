@@ -24,7 +24,7 @@ public class CarroServiceImplTest {
 	static class CarroServiceImplTestContextConfiguration {
 
 		@Bean
-		public CarroService carroService() {
+		public CarroService getCarroService() {
 			return new CarroServiceImpl();
 		}
 	}

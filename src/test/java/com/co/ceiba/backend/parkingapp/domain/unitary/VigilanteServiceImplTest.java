@@ -1,12 +1,10 @@
 package com.co.ceiba.backend.parkingapp.domain.unitary;
 
 import static com.co.ceiba.backend.parkingapp.databuilder.CarroTestDataBuilder.aCarro;
-import static com.co.ceiba.backend.parkingapp.databuilder.MotoTestDataBuilder.aMoto;
 import static com.co.ceiba.backend.parkingapp.databuilder.ParqueaderoCarroTestDataBuilder.aParqueaderoCarro;
-import static com.co.ceiba.backend.parkingapp.databuilder.ParqueaderoMotoTestDataBuilder.aParqueaderoMoto;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static com.co.ceiba.backend.parkingapp.databuilder.ParqueaderoMotoTestDataBuilder.aParqueaderoMoto;
+import static com.co.ceiba.backend.parkingapp.databuilder.MotoTestDataBuilder.aMoto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,36 +19,44 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.co.ceiba.backend.parkingapp.domain.Carro;
 import com.co.ceiba.backend.parkingapp.domain.ParqueaderoCarro;
 import com.co.ceiba.backend.parkingapp.domain.ParqueaderoMoto;
 import com.co.ceiba.backend.parkingapp.service.CarroService;
+import com.co.ceiba.backend.parkingapp.service.MotoService;
 import com.co.ceiba.backend.parkingapp.service.ParqueaderoCarroService;
+import com.co.ceiba.backend.parkingapp.service.ParqueaderoMotoService;
+import com.co.ceiba.backend.parkingapp.service.ValidadorParqueaderoService;
 import com.co.ceiba.backend.parkingapp.service.VigilanteService;
 import com.co.ceiba.backend.parkingapp.service.VigilanteServiceImpl;
 
 @RunWith(SpringRunner.class)
 public class VigilanteServiceImplTest {
 
-	private static final String PLACA_SIN_INICAL_A = "BOS16X";
-	private static final String PLACA_CON_INICAL_A = "AOZ15D";
+	private static final String PLACA_SIN_INICIAL_A = "BOS16X";
+	private static final String PLACA_CON_INICIAL_A = "AOZ15D";
 	private static final String CARRO_INGRESADO = "Carro registrado en el parqueadero";
-	private static final String SIN_ESPACIO = "No hay mas espacio para carros en el parqueadero";
-	private static final String NO_AUTORIZADO = "El carro con placa " + PLACA_CON_INICAL_A
+	private static final String MOTO_INGRESADO = "Moto registrado en el parqueadero";
+	private static final String SIN_ESPACIO_CARRO = "No hay mas espacio para carros en el parqueadero";
+	private static final String SIN_ESPACIO_MOTO = "No hay mas espacio para motos en el parqueadero";
+	private static final String CARRO_NO_AUTORIZADO = "El carro con placa " + PLACA_CON_INICIAL_A
+			+ " no esta autorizado para ingresar al parqueadero";
+	private static final String MOTO_NO_AUTORIZADO = "La moto con placa " + PLACA_CON_INICIAL_A
 			+ " no esta autorizado para ingresar al parqueadero";
 
 	private static final int MAXIMA_CANTIDAD_CARROS = 20;
 	private static final int MAXIMA_CANTIDAD_MOTOS = 10;
+	private static final int CILINDRAJE_125 = 125;
 
-	private static final LocalDateTime LUNES = LocalDateTime.of(2018, 5, 14, 10, 10);
-	private static final LocalDateTime DOMINGO = LocalDateTime.of(2018, 5, 13, 10, 10);
 	private static final LocalDateTime SABADO = LocalDateTime.of(2018, 5, 12, 10, 10);
+	private static final LocalDateTime DOMINGO = LocalDateTime.of(2018, 5, 13, 10, 10);
 	private static final LocalDateTime FECHA_ACTUAL = LocalDateTime.now();
 
 	@TestConfiguration
 	static class VigilanteServiceImplTestContextConfiguration {
 
 		@Bean
-		public VigilanteService vigilanteService() {
+		public VigilanteService getVigilanteService() {
 			return new VigilanteServiceImpl();
 		}
 	}
@@ -62,21 +68,55 @@ public class VigilanteServiceImplTest {
 	private CarroService carroService;
 
 	@MockBean
+	private MotoService motoService;
+
+	@MockBean
 	private ParqueaderoCarroService parqueaderoCarroService;
 
+	@MockBean
+	private ParqueaderoMotoService parqueaderoMotoService;
+
+	@MockBean
+	private ValidadorParqueaderoService validadorParqueaderoService;
+
 	@Test
-	public void validarYRegistrarIngresoCarroSinPlacaInicialA() {
-		// Arrange & Act
-		String mensaje = vigilanteService.validarYRegistrarIngresoCarro(PLACA_SIN_INICAL_A, FECHA_ACTUAL);
+	public void validarYRegistrarIngresoCarroSinPlacaInicialAYEspacio() {
+		// Arrange
+		List<ParqueaderoCarro> parqueaderoCarros = new ArrayList<>();
+		parqueaderoCarros.add(aParqueaderoCarro().withCarro(aCarro().build()).build());
+
+		ParqueaderoCarro[] arregloParqueaderoCarros = parqueaderoCarros
+				.toArray(new ParqueaderoCarro[parqueaderoCarros.size()]);
+
+		Mockito.when(parqueaderoCarroService.obtenerTodos()).thenReturn(parqueaderoCarros);
+		Mockito.when(validadorParqueaderoService.validarSiHayEspacioParaCarro(arregloParqueaderoCarros))
+				.thenReturn(true);
+		Mockito.when(validadorParqueaderoService.validarCondicionPlaca(PLACA_SIN_INICIAL_A)).thenReturn(false);
+
+		// Act
+		String mensaje = vigilanteService.validarYRegistrarIngresoCarro(PLACA_SIN_INICIAL_A, FECHA_ACTUAL);
 
 		// Assert
 		assertEquals(CARRO_INGRESADO, mensaje);
 	}
 
 	@Test
-	public void validarYRegistrarIngresoCarroConPlacaInicialA() {
-		// Arrange & Act
-		String mensaje = vigilanteService.validarYRegistrarIngresoCarro(PLACA_CON_INICAL_A, FECHA_ACTUAL);
+	public void validarYRegistrarIngresoCarroConPlacaInicialADomingoYEspacio() {
+		// Arrange
+		List<ParqueaderoCarro> parqueaderoCarros = new ArrayList<>();
+		parqueaderoCarros.add(aParqueaderoCarro().withCarro(aCarro().build()).build());
+
+		ParqueaderoCarro[] arregloParqueaderoCarros = parqueaderoCarros
+				.toArray(new ParqueaderoCarro[parqueaderoCarros.size()]);
+
+		Mockito.when(parqueaderoCarroService.obtenerTodos()).thenReturn(parqueaderoCarros);
+		Mockito.when(validadorParqueaderoService.validarSiHayEspacioParaCarro(arregloParqueaderoCarros))
+				.thenReturn(true);
+		Mockito.when(validadorParqueaderoService.validarCondicionPlaca(PLACA_CON_INICIAL_A)).thenReturn(true);
+		Mockito.when(validadorParqueaderoService.validarCondicionDia(DOMINGO)).thenReturn(true);
+
+		// Act
+		String mensaje = vigilanteService.validarYRegistrarIngresoCarro(PLACA_CON_INICIAL_A, DOMINGO);
 
 		// Assert
 		assertEquals(CARRO_INGRESADO, mensaje);
@@ -91,76 +131,94 @@ public class VigilanteServiceImplTest {
 			parqueaderoCarros.add(aParqueaderoCarro().withCarro(aCarro().build()).build());
 		}
 
+		ParqueaderoCarro[] arregloParqueaderoCarros = parqueaderoCarros
+				.toArray(new ParqueaderoCarro[parqueaderoCarros.size()]);
+
 		Mockito.when(parqueaderoCarroService.obtenerTodos()).thenReturn(parqueaderoCarros);
+		Mockito.when(validadorParqueaderoService.validarSiHayEspacioParaCarro(arregloParqueaderoCarros))
+				.thenReturn(false);
+
 		// Act
-		String mensaje = vigilanteService.validarYRegistrarIngresoCarro(PLACA_SIN_INICAL_A, FECHA_ACTUAL);
+		String mensaje = vigilanteService.validarYRegistrarIngresoCarro(PLACA_SIN_INICIAL_A, FECHA_ACTUAL);
 
 		// Assert
-		assertEquals(SIN_ESPACIO, mensaje);
+		assertEquals(SIN_ESPACIO_CARRO, mensaje);
 	}
 
 	@Test
 	public void validarYRegistrarIngresoCarroSinAutorizacion() {
-		// Arrange & Act
-		String mensaje = vigilanteService.validarYRegistrarIngresoCarro(PLACA_CON_INICAL_A, SABADO);
+		// Arrange
+		List<ParqueaderoCarro> parqueaderoCarros = new ArrayList<>();
+		parqueaderoCarros.add(aParqueaderoCarro().withCarro(aCarro().build()).build());
+
+		ParqueaderoCarro[] arregloParqueaderoCarros = parqueaderoCarros
+				.toArray(new ParqueaderoCarro[parqueaderoCarros.size()]);
+
+		Mockito.when(parqueaderoCarroService.obtenerTodos()).thenReturn(parqueaderoCarros);
+		Mockito.when(validadorParqueaderoService.validarSiHayEspacioParaCarro(arregloParqueaderoCarros))
+				.thenReturn(true);
+		Mockito.when(validadorParqueaderoService.validarCondicionPlaca(PLACA_CON_INICIAL_A)).thenReturn(true);
+		Mockito.when(validadorParqueaderoService.validarCondicionDia(SABADO)).thenReturn(false);
+
+		// Act
+		String mensaje = vigilanteService.validarYRegistrarIngresoCarro(PLACA_CON_INICIAL_A, SABADO);
 		// Assert
-		assertEquals(NO_AUTORIZADO, mensaje);
+		assertEquals(CARRO_NO_AUTORIZADO, mensaje);
 	}
 
 	@Test
 	public void registrarIngresoCarroTest() {
 		// Arrange & Act
-		String mensaje = vigilanteService.registrarIngresoCarro(PLACA_SIN_INICAL_A, FECHA_ACTUAL);
+		String mensaje = vigilanteService.registrarIngresoCarro(PLACA_SIN_INICIAL_A, FECHA_ACTUAL);
 
 		// Assert
 		assertEquals(CARRO_INGRESADO, mensaje);
 	}
 
 	@Test
-	public void validarSiHayEspacioParaCarroTest() {
+	public void validarYRegistrarIngresoMotoSinPlacaInicialAYEspacio() {
 		// Arrange
-		ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withCarro(aCarro().build()).build();
+		List<ParqueaderoMoto> parqueaderoMotos = new ArrayList<>();
+		parqueaderoMotos.add(aParqueaderoMoto().withMoto(aMoto().build()).build());
+
+		ParqueaderoMoto[] arregloParqueaderoMotos = parqueaderoMotos
+				.toArray(new ParqueaderoMoto[parqueaderoMotos.size()]);
+
+		Mockito.when(parqueaderoMotoService.obtenerTodos()).thenReturn(parqueaderoMotos);
+		Mockito.when(validadorParqueaderoService.validarSiHayEspacioParaMoto(arregloParqueaderoMotos)).thenReturn(true);
+		Mockito.when(validadorParqueaderoService.validarCondicionPlaca(PLACA_SIN_INICIAL_A)).thenReturn(false);
 
 		// Act
-		boolean menosDeVeinteCarros = vigilanteService.validarSiHayEspacioParaCarro(parqueaderoCarro);
+		String mensaje = vigilanteService.validarYRegistrarIngresoMoto(PLACA_SIN_INICIAL_A, CILINDRAJE_125,
+				FECHA_ACTUAL);
 
 		// Assert
-		assertTrue(menosDeVeinteCarros);
+		assertEquals(MOTO_INGRESADO, mensaje);
 	}
 
 	@Test
-	public void validarSiNoHayEspacioParaCarroTest() {
+	public void validarYRegistrarIngresoMotoConPlacaInicialADomingoYEspacio() {
 		// Arrange
-		List<ParqueaderoCarro> parqueaderoCarros = new ArrayList<>();
+		List<ParqueaderoMoto> parqueaderoMotos = new ArrayList<>();
+		parqueaderoMotos.add(aParqueaderoMoto().withMoto(aMoto().build()).build());
 
-		for (int contadorCarros = 1; contadorCarros <= MAXIMA_CANTIDAD_CARROS; contadorCarros++) {
-			parqueaderoCarros.add(aParqueaderoCarro().withCarro(aCarro().build()).build());
-		}
+		ParqueaderoMoto[] arregloParqueaderoMotos = parqueaderoMotos
+				.toArray(new ParqueaderoMoto[parqueaderoMotos.size()]);
 
-		ParqueaderoCarro[] arregloParqueaderoCarros = parqueaderoCarros
-				.toArray(new ParqueaderoCarro[parqueaderoCarros.size()]);
+		Mockito.when(parqueaderoMotoService.obtenerTodos()).thenReturn(parqueaderoMotos);
+		Mockito.when(validadorParqueaderoService.validarSiHayEspacioParaMoto(arregloParqueaderoMotos)).thenReturn(true);
+		Mockito.when(validadorParqueaderoService.validarCondicionPlaca(PLACA_CON_INICIAL_A)).thenReturn(true);
+		Mockito.when(validadorParqueaderoService.validarCondicionDia(DOMINGO)).thenReturn(true);
 
 		// Act
-		boolean menosDeVeinteCarros = vigilanteService.validarSiHayEspacioParaCarro(arregloParqueaderoCarros);
+		String mensaje = vigilanteService.validarYRegistrarIngresoMoto(PLACA_CON_INICIAL_A, CILINDRAJE_125, DOMINGO);
 
 		// Assert
-		assertFalse(menosDeVeinteCarros);
+		assertEquals(MOTO_INGRESADO, mensaje);
 	}
 
 	@Test
-	public void validarSiHayEspacioParaMotoTest() {
-		// Arrange
-		ParqueaderoMoto parqueaderoMoto = aParqueaderoMoto().withMoto(aMoto().build()).build();
-
-		// Act
-		boolean menosDeDiesMotos = vigilanteService.validarSiHayEspacioParaMoto(parqueaderoMoto);
-
-		// Assert
-		assertTrue(menosDeDiesMotos);
-	}
-
-	@Test
-	public void validarSiNoHayEspacioParaMotoTest() {
+	public void validarYRegistrarIngresoMotoSinEspacio() {
 		// Arrange
 		List<ParqueaderoMoto> parqueaderoMotos = new ArrayList<>();
 
@@ -171,56 +229,45 @@ public class VigilanteServiceImplTest {
 		ParqueaderoMoto[] arregloParqueaderoMotos = parqueaderoMotos
 				.toArray(new ParqueaderoMoto[parqueaderoMotos.size()]);
 
+		Mockito.when(parqueaderoMotoService.obtenerTodos()).thenReturn(parqueaderoMotos);
+		Mockito.when(validadorParqueaderoService.validarSiHayEspacioParaMoto(arregloParqueaderoMotos))
+				.thenReturn(false);
+
 		// Act
-		boolean menosDeDiesMotos = vigilanteService.validarSiHayEspacioParaMoto(arregloParqueaderoMotos);
+		String mensaje = vigilanteService.validarYRegistrarIngresoMoto(PLACA_SIN_INICIAL_A, CILINDRAJE_125,
+				FECHA_ACTUAL);
 
 		// Assert
-		assertFalse(menosDeDiesMotos);
+		assertEquals(SIN_ESPACIO_MOTO, mensaje);
 	}
 
 	@Test
-	public void validarSiPlacaIniciaConATest() {
-		// Arrange & Act
-		boolean placaIniciaConA = vigilanteService.validarCondicionPlaca(PLACA_CON_INICAL_A);
+	public void validarYRegistrarIngresoMotoSinAutorizacion() {
+		// Arrange
+		List<ParqueaderoMoto> parqueaderoMotos = new ArrayList<>();
+		parqueaderoMotos.add(aParqueaderoMoto().withMoto(aMoto().build()).build());
 
+		ParqueaderoMoto[] arregloParqueaderoMotos = parqueaderoMotos
+				.toArray(new ParqueaderoMoto[parqueaderoMotos.size()]);
+
+		Mockito.when(parqueaderoMotoService.obtenerTodos()).thenReturn(parqueaderoMotos);
+		Mockito.when(validadorParqueaderoService.validarSiHayEspacioParaMoto(arregloParqueaderoMotos)).thenReturn(true);
+		Mockito.when(validadorParqueaderoService.validarCondicionPlaca(PLACA_CON_INICIAL_A)).thenReturn(true);
+		Mockito.when(validadorParqueaderoService.validarCondicionDia(SABADO)).thenReturn(false);
+
+		// Act
+		String mensaje = vigilanteService.validarYRegistrarIngresoMoto(PLACA_CON_INICIAL_A, CILINDRAJE_125, SABADO);
 		// Assert
-		assertTrue(placaIniciaConA);
+		assertEquals(MOTO_NO_AUTORIZADO, mensaje);
 	}
 
 	@Test
-	public void validarSiPlacaIniciaSinATest() {
+	public void registrarIngresoMotoTest() {
 		// Arrange & Act
-		boolean placaIniciaSinA = vigilanteService.validarCondicionPlaca(PLACA_SIN_INICAL_A);
+		String mensaje = vigilanteService.registrarIngresoMoto(PLACA_SIN_INICIAL_A, CILINDRAJE_125, FECHA_ACTUAL);
 
 		// Assert
-		assertFalse(placaIniciaSinA);
-	}
-
-	@Test
-	public void validarSiDiaEsLunesTest() {
-		// Arrange & Act
-		boolean esLunes = vigilanteService.validarCondicionDia(LUNES);
-
-		// Assert
-		assertTrue(esLunes);
-	}
-
-	@Test
-	public void validarSiDiaEsDomingoTest() {
-		// Arrange & Act
-		boolean esDomingo = vigilanteService.validarCondicionDia(DOMINGO);
-
-		// Assert
-		assertTrue(esDomingo);
-	}
-
-	@Test
-	public void validarSiDiaNoEsLunesNiDomingoTest() {
-		// Arrange & Act
-		boolean noEsDomingo = vigilanteService.validarCondicionDia(SABADO);
-
-		// Assert
-		assertFalse(noEsDomingo);
+		assertEquals(MOTO_INGRESADO, mensaje);
 	}
 
 }

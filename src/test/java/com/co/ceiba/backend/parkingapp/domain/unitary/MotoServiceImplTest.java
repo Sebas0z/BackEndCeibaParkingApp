@@ -24,7 +24,7 @@ public class MotoServiceImplTest {
 	static class MotoServiceImplTestContextConfiguration {
 
 		@Bean
-		public MotoService motoService() {
+		public MotoService getMotoService() {
 			return new MotoServiceImpl();
 		}
 	}

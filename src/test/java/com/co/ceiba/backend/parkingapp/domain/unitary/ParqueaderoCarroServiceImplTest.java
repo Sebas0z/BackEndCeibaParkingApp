@@ -29,7 +29,7 @@ public class ParqueaderoCarroServiceImplTest {
 	static class ParqueaderoCarroServiceImplTestContextConfiguration {
 
 		@Bean
-		public ParqueaderoCarroService parqueaderoCarroService() {
+		public ParqueaderoCarroService getParqueaderoCarroService() {
 			return new ParqueaderoCarroServiceImpl();
 		}
 	}

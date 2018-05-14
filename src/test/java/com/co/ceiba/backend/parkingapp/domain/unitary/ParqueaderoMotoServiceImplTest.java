@@ -3,6 +3,9 @@ package com.co.ceiba.backend.parkingapp.domain.unitary;
 import static com.co.ceiba.backend.parkingapp.databuilder.MotoTestDataBuilder.aMoto;
 import static com.co.ceiba.backend.parkingapp.databuilder.ParqueaderoMotoTestDataBuilder.aParqueaderoMoto;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +29,7 @@ public class ParqueaderoMotoServiceImplTest {
 	static class ParqueaderoMotoServiceImplTestContextConfiguration {
 
 		@Bean
-		public ParqueaderoMotoService parqueaderoMotoService() {
+		public ParqueaderoMotoService getParqueaderoMotoService() {
 			return new ParqueaderoMotoServiceImpl();
 		}
 	}
@@ -47,9 +50,18 @@ public class ParqueaderoMotoServiceImplTest {
 		// Act
 		ParqueaderoMoto parqueaderoMotoAgregado = parqueaderoMotoService.agregarParqueaderoMoto(parqueaderoMoto);
 
-		// Asser
+		// Assert
 		assertEquals(parqueaderoMoto.getMoto().getPlaca(), parqueaderoMotoAgregado.getMoto().getPlaca());
 
+	}
+
+	@Test
+	public void obtenerTodos() {
+		// Arrange & Act
+		List<ParqueaderoMoto> listaParqueaderoMoto = parqueaderoMotoService.obtenerTodos();
+
+		// Assert
+		assertNotNull(listaParqueaderoMoto);
 	}
 
 }
