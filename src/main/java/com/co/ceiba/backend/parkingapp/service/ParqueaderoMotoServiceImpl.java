@@ -16,7 +16,7 @@ public class ParqueaderoMotoServiceImpl implements ParqueaderoMotoService {
 	ParqueaderoMotoRepository parqueaderoMotoRepository;
 
 	@Override
-	public ParqueaderoMoto agregarParqueaderoMoto(ParqueaderoMoto parqueaderoMoto) {
+	public ParqueaderoMoto guardarParqueaderoMoto(ParqueaderoMoto parqueaderoMoto) {
 		return parqueaderoMotoRepository.save(parqueaderoMoto);
 	}
 

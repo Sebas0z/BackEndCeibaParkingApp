@@ -4,7 +4,7 @@ import com.co.ceiba.backend.parkingapp.domain.Carro;
 
 public interface CarroService {
 	
-	public Carro agregarCarro(Carro carro);
+	public Carro guardarCarro(Carro carro);
 	
 	public Carro obtenerCarro(String placa);
 

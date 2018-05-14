@@ -7,7 +7,7 @@ import com.co.ceiba.backend.parkingapp.domain.ParqueaderoMoto;
 
 public interface ParqueaderoMotoService {
 
-	public ParqueaderoMoto agregarParqueaderoMoto(ParqueaderoMoto parqueaderoMoto);
+	public ParqueaderoMoto guardarParqueaderoMoto(ParqueaderoMoto parqueaderoMoto);
 
 	public List<ParqueaderoMoto> obtenerMotosParqueadas();
 

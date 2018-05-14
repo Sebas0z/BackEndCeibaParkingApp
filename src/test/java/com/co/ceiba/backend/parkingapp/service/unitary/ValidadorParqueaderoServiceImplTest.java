@@ -1,4 +1,4 @@
-package com.co.ceiba.backend.parkingapp.domain.unitary;
+package com.co.ceiba.backend.parkingapp.service.unitary;
 
 import static com.co.ceiba.backend.parkingapp.databuilder.CarroTestDataBuilder.aCarro;
 import static com.co.ceiba.backend.parkingapp.databuilder.MotoTestDataBuilder.aMoto;

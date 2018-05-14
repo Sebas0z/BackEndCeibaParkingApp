@@ -13,7 +13,7 @@ public class MotoServiceImpl implements MotoService {
 	private MotoRepository motoRepository;
 
 	@Override
-	public Moto agregarMoto(Moto moto) {
+	public Moto guardarMoto(Moto moto) {
 		return motoRepository.save(moto);
 	}
 

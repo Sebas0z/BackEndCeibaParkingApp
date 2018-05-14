@@ -1,4 +1,4 @@
-package com.co.ceiba.backend.parkingapp.domain.unitary;
+package com.co.ceiba.backend.parkingapp.service.unitary;
 
 import static com.co.ceiba.backend.parkingapp.databuilder.CarroTestDataBuilder.aCarro;
 import static org.junit.Assert.assertEquals;
@@ -42,7 +42,7 @@ public class CarroServiceImplTest {
 		Mockito.when(CarroRepository.save(carro)).thenReturn(carro);
 
 		// Act
-		Carro carroAgregado = carroService.agregarCarro(carro);
+		Carro carroAgregado = carroService.guardarCarro(carro);
 
 		// Assert
 		assertEquals(carro.getPlaca(), carroAgregado.getPlaca());

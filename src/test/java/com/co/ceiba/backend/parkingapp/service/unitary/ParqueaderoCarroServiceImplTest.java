@@ -1,4 +1,4 @@
-package com.co.ceiba.backend.parkingapp.domain.unitary;
+package com.co.ceiba.backend.parkingapp.service.unitary;
 
 import static com.co.ceiba.backend.parkingapp.databuilder.CarroTestDataBuilder.aCarro;
 import static com.co.ceiba.backend.parkingapp.databuilder.ParqueaderoCarroTestDataBuilder.aParqueaderoCarro;
@@ -48,7 +48,7 @@ public class ParqueaderoCarroServiceImplTest {
 		Mockito.when(parqueaderoCarroRepository.save(parqueaderoCarro)).thenReturn(parqueaderoCarro);
 
 		// Act
-		ParqueaderoCarro parqueaderoCarroAgregado = parqueaderoCarroService.agregarParqueaderoCarro(parqueaderoCarro);
+		ParqueaderoCarro parqueaderoCarroAgregado = parqueaderoCarroService.guardarParqueaderoCarro(parqueaderoCarro);
 		// Assert
 		assertEquals(parqueaderoCarro.getCarro().getPlaca(), parqueaderoCarroAgregado.getCarro().getPlaca());
 		assertEquals(parqueaderoCarro.getFechaIngreso(), parqueaderoCarroAgregado.getFechaIngreso());

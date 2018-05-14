@@ -13,7 +13,7 @@ public class CarroServiceImpl implements CarroService {
 	private CarroRepository carroRepository;
 
 	@Override
-	public Carro agregarCarro(Carro carro) {
+	public Carro guardarCarro(Carro carro) {
 		return carroRepository.save(carro);
 	}
 

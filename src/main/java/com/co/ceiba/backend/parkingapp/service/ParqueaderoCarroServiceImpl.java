@@ -16,7 +16,7 @@ public class ParqueaderoCarroServiceImpl implements ParqueaderoCarroService {
 	ParqueaderoCarroRepository parqueaderoCarroRepository;
 
 	@Override
-	public ParqueaderoCarro agregarParqueaderoCarro(ParqueaderoCarro parqueaderoCarro) {
+	public ParqueaderoCarro guardarParqueaderoCarro(ParqueaderoCarro parqueaderoCarro) {
 		return parqueaderoCarroRepository.save(parqueaderoCarro);
 	}
 

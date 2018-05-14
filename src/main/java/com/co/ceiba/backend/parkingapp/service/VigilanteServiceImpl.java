@@ -1,6 +1,5 @@
 package com.co.ceiba.backend.parkingapp.service;
 
-import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -33,15 +32,13 @@ public class VigilanteServiceImpl implements VigilanteService {
 
 	@Override
 	public String validarYRegistrarIngresoCarro(String placa, LocalDateTime dia) {
-		List<ParqueaderoCarro> listaParqueaderoCarro = parqueaderoCarroService.obtenerCarrosParqueados();
-		ParqueaderoCarro[] arregloParqueaderoCarro = listaParqueaderoCarro
-				.toArray(new ParqueaderoCarro[listaParqueaderoCarro.size()]);
+		ParqueaderoCarro[] arregloParqueaderoCarro = obtenerCarrosParqueados();
 
 		if (validadorParqueaderoService.validarSiHayEspacioParaCarro(arregloParqueaderoCarro)) {
 			if (!validadorParqueaderoService.validarCondicionPlaca(placa)) {
-				return registrarIngresoCarro(placa, dia);
+				return guardarParqueaderoCarro(placa, dia);
 			} else if (validadorParqueaderoService.validarCondicionDia(dia)) {
-				return registrarIngresoCarro(placa, dia);
+				return guardarParqueaderoCarro(placa, dia);
 			} else {
 				return "El carro con placa " + placa + " no esta autorizado para ingresar al parqueadero";
 			}
@@ -50,25 +47,27 @@ public class VigilanteServiceImpl implements VigilanteService {
 		}
 	}
 
-	@Override
-	public String registrarIngresoCarro(String placa, LocalDateTime dia) {
+	private ParqueaderoCarro[] obtenerCarrosParqueados() {
+		List<ParqueaderoCarro> listaParqueaderoCarro = parqueaderoCarroService.obtenerCarrosParqueados();
+		return listaParqueaderoCarro.toArray(new ParqueaderoCarro[listaParqueaderoCarro.size()]);
+	}
+
+	private String guardarParqueaderoCarro(String placa, LocalDateTime dia) {
 		parqueaderoCarroService
-				.agregarParqueaderoCarro(new ParqueaderoCarro(carroService.agregarCarro(new Carro(placa)), dia));
+				.guardarParqueaderoCarro(new ParqueaderoCarro(carroService.guardarCarro(new Carro(placa)), dia));
 
 		return "Carro registrado en el parqueadero";
 	}
 
 	@Override
 	public String validarYRegistrarIngresoMoto(String placa, int cilindraje, LocalDateTime dia) {
-		List<ParqueaderoMoto> listaParqueaderoMoto = parqueaderoMotoService.obtenerMotosParqueadas();
-		ParqueaderoMoto[] arregloParqueaderoMoto = listaParqueaderoMoto
-				.toArray(new ParqueaderoMoto[listaParqueaderoMoto.size()]);
+		ParqueaderoMoto[] arregloParqueaderoMoto = obtenerMotosParqueadas();
 
 		if (validadorParqueaderoService.validarSiHayEspacioParaMoto(arregloParqueaderoMoto)) {
 			if (!validadorParqueaderoService.validarCondicionPlaca(placa)) {
-				return registrarIngresoMoto(placa, cilindraje, dia);
+				return guardarParqueaderoMoto(placa, cilindraje, dia);
 			} else if (validadorParqueaderoService.validarCondicionDia(dia)) {
-				return registrarIngresoMoto(placa, cilindraje, dia);
+				return guardarParqueaderoMoto(placa, cilindraje, dia);
 			} else {
 				return "La moto con placa " + placa + " no esta autorizado para ingresar al parqueadero";
 			}
@@ -77,32 +76,64 @@ public class VigilanteServiceImpl implements VigilanteService {
 		}
 	}
 
-	@Override
-	public String registrarIngresoMoto(String placa, int cilindraje, LocalDateTime dia) {
+	private ParqueaderoMoto[] obtenerMotosParqueadas() {
+		List<ParqueaderoMoto> listaParqueaderoMoto = parqueaderoMotoService.obtenerMotosParqueadas();
+		return listaParqueaderoMoto.toArray(new ParqueaderoMoto[listaParqueaderoMoto.size()]);
+	}
+
+	private String guardarParqueaderoMoto(String placa, int cilindraje, LocalDateTime dia) {
 		parqueaderoMotoService
-				.agregarParqueaderoMoto(new ParqueaderoMoto(motoService.agregarMoto(new Moto(placa, cilindraje)), dia));
+				.guardarParqueaderoMoto(new ParqueaderoMoto(motoService.guardarMoto(new Moto(placa, cilindraje)), dia));
 
 		return "Moto registrado en el parqueadero";
 	}
 
 	@Override
-	public String cobrarRetiroCarro(String placa, LocalDateTime dia) {
-		Carro carro = carroService.obtenerCarro(placa);
-		ParqueaderoCarro parqueaderoCarro = parqueaderoCarroService.obtenerCarroParqueado(carro);
+	public String cobrarRetiroCarro(String placa, LocalDateTime fechaRetiro) {
+		ParqueaderoCarro parqueaderoCarro = obtenerCarroParqueado(placa);
 
-		long hours = ChronoUnit.HOURS.between(parqueaderoCarro.getFechaIngreso(), dia);
-		
-		// horas / 24
-		// trunc resultado para dias
-		// los decimales se multiplican por 24 para obtener las horas y listo
-		
-		return "1000";
+		double diferenciaHoras = (double) ChronoUnit.HOURS.between(parqueaderoCarro.getFechaIngreso(), fechaRetiro);
+		double dias = Math.floor(diferenciaHoras / 24);
+		double horas = ((diferenciaHoras / 24) % 1) * 24;
+
+		double valorTotalDias = dias * 8000;
+		double valorTotalHoras = horas < 9 ? horas * 1000 : 8000;
+		double valorTotal = valorTotalDias + valorTotalHoras;
+
+		parqueaderoCarroService.guardarParqueaderoCarro(parqueaderoCarro);
+
+		return Integer.toString((int) valorTotal);
+	}
+
+	private ParqueaderoCarro obtenerCarroParqueado(String placa) {
+		Carro carro = carroService.obtenerCarro(placa);
+		return parqueaderoCarroService.obtenerCarroParqueado(carro);
 	}
 
 	@Override
-	public String cobrarRetiroMoto(String placa, LocalDateTime dia) {
-		// TODO Auto-generated method stub
-		return null;
+	public String cobrarRetiroMoto(String placa, LocalDateTime fechaRetiro) {
+		ParqueaderoMoto parqueaderoMoto = obtenerMotoParqueada(placa);
+
+		double diferenciaHoras = (double) ChronoUnit.HOURS.between(parqueaderoMoto.getFechaIngreso(), fechaRetiro);
+		double dias = Math.floor(diferenciaHoras / 24);
+		double horas = ((diferenciaHoras / 24) % 1) * 24;
+
+		double valorTotalDias = dias * 4000;
+		double valorTotalHoras = horas < 9 ? horas * 500 : 4000;
+		double valorTotal = valorTotalDias + valorTotalHoras;
+
+		if (parqueaderoMoto.getMoto().getCilindraje() > 500) {
+			valorTotal += 2000;
+		}
+
+		parqueaderoMotoService.guardarParqueaderoMoto(parqueaderoMoto);
+
+		return Integer.toString((int) valorTotal);
+	}
+
+	private ParqueaderoMoto obtenerMotoParqueada(String placa) {
+		Moto moto = motoService.obtenerMoto(placa);
+		return parqueaderoMotoService.obtenerMotoParqueada(moto);
 	}
 
 }

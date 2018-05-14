@@ -4,7 +4,7 @@ import com.co.ceiba.backend.parkingapp.domain.Moto;
 
 public interface MotoService {
 	
-	public Moto agregarMoto(Moto moto);
+	public Moto guardarMoto(Moto moto);
 	
 	public Moto obtenerMoto(String placa);
 
