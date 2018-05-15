@@ -12,7 +12,6 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -60,29 +59,45 @@ public class VigilanteServiceImplTest {
 	private ParqueaderoMotoService parqueaderoMotoService;
 
 	@Test
+	public void Test10CobrarRetiroCarroMenosDeUnaHoraTest() {
+		// Arrange
+		LocalDateTime fechaIngreso = LocalDateTime.of(2018, 5, 13, 15, 5);
+		LocalDateTime fechaRetiro = LocalDateTime.of(2018, 5, 13, 15, 6);
+
+		vigilanteService.validarYRegistrarIngresoCarro("KUT11L", fechaIngreso);
+
+		// Act
+		String valorTotal = vigilanteService.cobrarRetiroCarro("KUT11L", fechaRetiro);
+
+		// Assert
+		assertEquals("1000", valorTotal);
+	}
+
+	@Test
 	public void Test11CobrarRetiroCarroMenosDeNueveHorasTest() {
 		// Arrange
 		LocalDateTime fechaIngreso = LocalDateTime.of(2018, 5, 13, 15, 5);
-		LocalDateTime fechaRetiro = LocalDateTime.of(2018, 5, 13, 18, 5);
+		LocalDateTime fechaRetiro = LocalDateTime.of(2018, 5, 13, 18, 6);
 
-		vigilanteService.validarYRegistrarIngresoCarro(PLACA_SIN_INICIAL_A, fechaIngreso);
+		vigilanteService.validarYRegistrarIngresoCarro("ZTU22Z", fechaIngreso);
 
 		// Act
-		String valorTotal = vigilanteService.cobrarRetiroCarro(PLACA_SIN_INICIAL_A, fechaRetiro);
+		String valorTotal = vigilanteService.cobrarRetiroCarro("ZTU22Z", fechaRetiro);
 
 		// Assert
 		assertEquals("3000", valorTotal);
 	}
 
+	@Test
 	public void Test12CobrarRetiroCarroDeUnDiaTest() {
 		// Arrange
 		LocalDateTime fechaIngreso = LocalDateTime.of(2018, 5, 13, 13, 5);
 		LocalDateTime fechaRetiro = LocalDateTime.of(2018, 5, 13, 23, 5);
 
-		vigilanteService.validarYRegistrarIngresoCarro(PLACA_SIN_INICIAL_A, fechaIngreso);
+		vigilanteService.validarYRegistrarIngresoCarro("BUE43A", fechaIngreso);
 
 		// Act
-		String valorTotal = vigilanteService.cobrarRetiroCarro(PLACA_SIN_INICIAL_A, fechaRetiro);
+		String valorTotal = vigilanteService.cobrarRetiroCarro("BUE43A", fechaRetiro);
 
 		// Assert
 		assertEquals("8000", valorTotal);
@@ -94,10 +109,10 @@ public class VigilanteServiceImplTest {
 		LocalDateTime fechaIngreso = LocalDateTime.of(2018, 5, 12, 13, 5);
 		LocalDateTime fechaRetiro = LocalDateTime.of(2018, 5, 13, 16, 5);
 
-		vigilanteService.validarYRegistrarIngresoCarro(PLACA_SIN_INICIAL_A, fechaIngreso);
+		vigilanteService.validarYRegistrarIngresoCarro("MON35A", fechaIngreso);
 
 		// Act
-		String valorTotal = vigilanteService.cobrarRetiroCarro(PLACA_SIN_INICIAL_A, fechaRetiro);
+		String valorTotal = vigilanteService.cobrarRetiroCarro("MON35A", fechaRetiro);
 
 		// Assert
 		assertEquals("11000", valorTotal);
@@ -149,7 +164,82 @@ public class VigilanteServiceImplTest {
 	}
 
 	@Test
-	public void Test21ValidarYRegistrarIngresoMotoSinPlacaInicialAYEspacioTest() {
+	public void Test20CobrarRetiroMotoMenosDeUnaHoraTest() {
+		// Arrange
+		LocalDateTime fechaIngreso = LocalDateTime.of(2018, 5, 13, 15, 5);
+		LocalDateTime fechaRetiro = LocalDateTime.of(2018, 5, 13, 15, 6);
+
+		vigilanteService.validarYRegistrarIngresoMoto("HAJ00X", CILINDRAJE, fechaIngreso);
+
+		// Act
+		String valorTotal = vigilanteService.cobrarRetiroMoto("HAJ00X", fechaRetiro);
+
+		// Assert
+		assertEquals("500", valorTotal);
+	}
+
+	@Test
+	public void Test21CobrarRetiroMotoMenosDeNueveHorasTest() {
+		// Arrange
+		LocalDateTime fechaIngreso = LocalDateTime.of(2018, 5, 13, 15, 5);
+		LocalDateTime fechaRetiro = LocalDateTime.of(2018, 5, 13, 18, 5);
+
+		vigilanteService.validarYRegistrarIngresoMoto("FGL55V", CILINDRAJE, fechaIngreso);
+
+		// Act
+		String valorTotal = vigilanteService.cobrarRetiroMoto("FGL55V", fechaRetiro);
+
+		// Assert
+		assertEquals("1500", valorTotal);
+	}
+
+	@Test
+	public void Test22CobrarRetiroMotoDeUnDiaTest() {
+		// Arrange
+		LocalDateTime fechaIngreso = LocalDateTime.of(2018, 5, 13, 13, 5);
+		LocalDateTime fechaRetiro = LocalDateTime.of(2018, 5, 13, 23, 5);
+
+		vigilanteService.validarYRegistrarIngresoMoto("AAO02L", CILINDRAJE, fechaIngreso);
+
+		// Act
+		String valorTotal = vigilanteService.cobrarRetiroMoto("AAO02L", fechaRetiro);
+
+		// Assert
+		assertEquals("4000", valorTotal);
+	}
+
+	@Test
+	public void Test23CobrarRetiroMotoDeMasDeUnDiaTest() {
+		// Arrange
+		LocalDateTime fechaIngreso = LocalDateTime.of(2018, 5, 12, 13, 5);
+		LocalDateTime fechaRetiro = LocalDateTime.of(2018, 5, 13, 16, 5);
+
+		vigilanteService.validarYRegistrarIngresoMoto("MLP88S", CILINDRAJE, fechaIngreso);
+
+		// Act
+		String valorTotal = vigilanteService.cobrarRetiroMoto("MLP88S", fechaRetiro);
+
+		// Assert
+		assertEquals("5500", valorTotal);
+	}
+
+	@Test
+	public void Test24CobrarRetiroMotoDeUnDiaYCilindrajeMayorA500Test() {
+		// Arrange
+		LocalDateTime fechaIngreso = LocalDateTime.of(2018, 5, 13, 13, 5);
+		LocalDateTime fechaRetiro = LocalDateTime.of(2018, 5, 13, 23, 5);
+
+		vigilanteService.validarYRegistrarIngresoMoto("SOS20P", 650, fechaIngreso);
+
+		// Act
+		String valorTotal = vigilanteService.cobrarRetiroMoto("SOS20P", fechaRetiro);
+
+		// Assert
+		assertEquals("6000", valorTotal);
+	}
+
+	@Test
+	public void Test25ValidarYRegistrarIngresoMotoSinPlacaInicialAYEspacioTest() {
 		// Arrange & Act
 		String mensaje = vigilanteService.validarYRegistrarIngresoMoto(PLACA_SIN_INICIAL_A, CILINDRAJE, FECHA_ACTUAL);
 
@@ -158,7 +248,7 @@ public class VigilanteServiceImplTest {
 	}
 
 	@Test
-	public void Test22ValidarYRegistrarIngresoMotoConPlacaInicialADomingoYEspacioTest() {
+	public void Test26ValidarYRegistrarIngresoMotoConPlacaInicialADomingoYEspacioTest() {
 		// Arrange & Act
 		String mensaje = vigilanteService.validarYRegistrarIngresoMoto(PLACA_CON_INICIAL_A, CILINDRAJE, DOMINGO);
 
@@ -167,7 +257,7 @@ public class VigilanteServiceImplTest {
 	}
 
 	@Test
-	public void Test23ValidarYRegistrarIngresoMotoSinAutorizacionTest() {
+	public void Test27ValidarYRegistrarIngresoMotoSinAutorizacionTest() {
 		// Arrange & Act
 		String mensaje = vigilanteService.validarYRegistrarIngresoMoto(PLACA_CON_INICIAL_A, CILINDRAJE, SABADO);
 		// Assert
@@ -176,7 +266,7 @@ public class VigilanteServiceImplTest {
 	}
 
 	@Test
-	public void Test24ValidarYRegistrarIngresoMotoSinEspacioTest() {
+	public void Test28ValidarYRegistrarIngresoMotoSinEspacioTest() {
 		// Arrange
 		Moto moto = motoService.guardarMoto(aMoto().build());
 

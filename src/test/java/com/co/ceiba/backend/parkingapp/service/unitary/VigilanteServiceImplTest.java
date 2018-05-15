@@ -232,6 +232,24 @@ public class VigilanteServiceImplTest {
 	}
 
 	@Test
+	public void Test10CobrarRetiroCarroMenosDeUnaHoraTest() {
+		// Arrange
+		LocalDateTime fechaIngreso = LocalDateTime.of(2018, 5, 13, 15, 5);
+		LocalDateTime fechaRetiro = LocalDateTime.of(2018, 5, 13, 15, 6);
+		Carro carro = aCarro().build();
+		ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withFechaIngreso(fechaIngreso).build();
+
+		Mockito.when(carroService.obtenerCarro(Mockito.anyString())).thenReturn(carro);
+		Mockito.when(parqueaderoCarroService.obtenerCarroParqueado(Mockito.any())).thenReturn(parqueaderoCarro);
+
+		// Act
+		String valorTotal = vigilanteService.cobrarRetiroCarro(carro.getPlaca(), fechaRetiro);
+
+		// Assert
+		assertEquals("1000", valorTotal);
+	}
+
+	@Test
 	public void cobrarRetiroMotoMenosDeNueveHorasTest() {
 		// Arrange
 		LocalDateTime fechaIngreso = LocalDateTime.of(2018, 5, 13, 15, 5);
@@ -301,6 +319,24 @@ public class VigilanteServiceImplTest {
 
 		// Assert
 		assertEquals("6000", valorTotal);
+	}
+
+	@Test
+	public void CobrarRetiroMotoMenosDeUnaHoraTest() {
+		// Arrange
+		LocalDateTime fechaIngreso = LocalDateTime.of(2018, 5, 13, 15, 5);
+		LocalDateTime fechaRetiro = LocalDateTime.of(2018, 5, 13, 15, 6);
+		Moto moto = aMoto().build();
+		ParqueaderoMoto parqueaderoMoto = aParqueaderoMoto().withMoto(moto).withFechaIngreso(fechaIngreso).build();
+
+		Mockito.when(motoService.obtenerMoto(Mockito.anyString())).thenReturn(moto);
+		Mockito.when(parqueaderoMotoService.obtenerMotoParqueada(Mockito.any())).thenReturn(parqueaderoMoto);
+
+		// Act
+		String valorTotal = vigilanteService.cobrarRetiroMoto(moto.getPlaca(), fechaRetiro);
+
+		// Assert
+		assertEquals("500", valorTotal);
 	}
 
 }

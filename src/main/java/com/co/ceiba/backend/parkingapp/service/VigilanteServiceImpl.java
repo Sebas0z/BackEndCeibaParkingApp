@@ -113,7 +113,8 @@ public class VigilanteServiceImpl implements VigilanteService {
 
 		ParqueaderoCarro parqueaderoCarro = obtenerCarroParqueado(placa);
 
-		double diferenciaHoras = (double) ChronoUnit.HOURS.between(parqueaderoCarro.getFechaIngreso(), fechaRetiro);
+		double diferencia = (double) ChronoUnit.HOURS.between(parqueaderoCarro.getFechaIngreso(), fechaRetiro);
+		double diferenciaHoras = diferencia < 1 ? 1 : diferencia;
 		double dias = Math.floor(diferenciaHoras / 24);
 		double horas = ((diferenciaHoras / 24) % 1) * 24;
 
@@ -140,7 +141,8 @@ public class VigilanteServiceImpl implements VigilanteService {
 
 		ParqueaderoMoto parqueaderoMoto = obtenerMotoParqueada(placa);
 
-		double diferenciaHoras = (double) ChronoUnit.HOURS.between(parqueaderoMoto.getFechaIngreso(), fechaRetiro);
+		double diferencia = (double) ChronoUnit.HOURS.between(parqueaderoMoto.getFechaIngreso(), fechaRetiro);
+		double diferenciaHoras = diferencia < 1 ? 1 : diferencia;
 		double dias = Math.floor(diferenciaHoras / 24);
 		double horas = ((diferenciaHoras / 24) % 1) * 24;
 

@@ -51,12 +51,12 @@ public class VigilanteRestControllerTest {
 		Moto moto = aMoto().build();
 		Mockito.when(
 				vigilanteService.validarYRegistrarIngresoMoto(Mockito.anyString(), Mockito.anyInt(), Mockito.any()))
-				.thenReturn("Moto registrado en el parqueadero");
+				.thenReturn("Moto registrada en el parqueadero");
 
 		// Act & Assert
 		mockMvc.perform(get("/vigilante/ingresarMoto").param(PLACA, moto.getPlaca()).param("cilindraje",
 				Integer.toString(moto.getCilindraje()))).andDo(print()).andExpect(status().isOk())
-				.andExpect(content().string("Moto registrado en el parqueadero"));
+				.andExpect(content().string("Moto registrada en el parqueadero"));
 	}
 
 	@Test
