@@ -11,8 +11,11 @@ public class Moto extends Vehiculo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	private int cilindraje;
+
+	protected Moto() {
+	}
 
 	public Moto(String placa, int cilindraje) {
 		super(placa);

@@ -1,51 +1,40 @@
-package com.co.ceiba.backend.parkingapp.service.unitary;
+package com.co.ceiba.backend.parkingapp.service.integration;
 
 import static com.co.ceiba.backend.parkingapp.databuilder.CarroTestDataBuilder.aCarro;
 import static com.co.ceiba.backend.parkingapp.databuilder.ParqueaderoCarroTestDataBuilder.aParqueaderoCarro;
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.co.ceiba.backend.parkingapp.domain.Carro;
 import com.co.ceiba.backend.parkingapp.domain.ParqueaderoCarro;
-import com.co.ceiba.backend.parkingapp.reposity.ParqueaderoCarroRepository;
+import com.co.ceiba.backend.parkingapp.service.CarroService;
 import com.co.ceiba.backend.parkingapp.service.ParqueaderoCarroService;
-import com.co.ceiba.backend.parkingapp.service.ParqueaderoCarroServiceImpl;
 
 @RunWith(SpringRunner.class)
+@SpringBootTest
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ParqueaderoCarroServiceImplTest {
-
-	@TestConfiguration
-	static class ParqueaderoCarroServiceImplTestContextConfiguration {
-
-		@Bean
-		public ParqueaderoCarroService getParqueaderoCarroService() {
-			return new ParqueaderoCarroServiceImpl();
-		}
-	}
 
 	@Autowired
 	private ParqueaderoCarroService parqueaderoCarroService;
 
-	@MockBean
-	private ParqueaderoCarroRepository parqueaderoCarroRepository;
+	@Autowired
+	private CarroService carroService;
 
 	@Test
-	public void guardarParqueaderoCarroTest() {
+	public void Test1GuardarParqueaderoCarroTest() {
 		// Arrange
-		Carro carro = aCarro().build();
+		Carro carro = carroService.guardarCarro(aCarro().build());
 		ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withCarro(carro).build();
-		Mockito.when(parqueaderoCarroRepository.save(parqueaderoCarro)).thenReturn(parqueaderoCarro);
 
 		// Act
 		ParqueaderoCarro parqueaderoCarroAgregado = parqueaderoCarroService.guardarParqueaderoCarro(parqueaderoCarro);
@@ -55,28 +44,28 @@ public class ParqueaderoCarroServiceImplTest {
 	}
 
 	@Test
-	public void obtenerCarrosParqueadosTest() {
+	public void Test2ObtenerCarrosParqueadosTest() {
 		// Arrange
-		Carro carro = aCarro().build();
+		Carro carro = carroService.guardarCarro(aCarro().build());
 		ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withCarro(carro).build();
-		List<ParqueaderoCarro> listaParqueaderoCarro = new ArrayList<>();
-		listaParqueaderoCarro.add(parqueaderoCarro);
+		parqueaderoCarroService.guardarParqueaderoCarro(parqueaderoCarro);
 
-		Mockito.when(parqueaderoCarroRepository.findByFechaRetiroIsNull()).thenReturn(listaParqueaderoCarro);
+		ParqueaderoCarro parqueaderoCarro2 = aParqueaderoCarro().withCarro(carro).build();
+		parqueaderoCarroService.guardarParqueaderoCarro(parqueaderoCarro2);
 
 		// Act
 		List<ParqueaderoCarro> parqueaderoCarroObtenidos = parqueaderoCarroService.obtenerCarrosParqueados();
 
 		// Assert
-		assertEquals(1, parqueaderoCarroObtenidos.size());
+		assertEquals(3, parqueaderoCarroObtenidos.size());
 	}
 
 	@Test
-	public void obtenerCarroParqueadoTest() {
+	public void Test3ObtenerCarroParqueadoTest() {
 		// Arrange
-		Carro carro = aCarro().build();
+		Carro carro = carroService.guardarCarro(aCarro().build());
 		ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withCarro(carro).build();
-		Mockito.when(parqueaderoCarroRepository.findByCarroAndFechaRetiroIsNull(carro)).thenReturn(parqueaderoCarro);
+		parqueaderoCarroService.guardarParqueaderoCarro(parqueaderoCarro);
 
 		// Act
 		ParqueaderoCarro parqueaderoCarroObtenido = parqueaderoCarroService.obtenerCarroParqueado(carro);

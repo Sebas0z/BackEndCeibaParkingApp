@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class ParqueaderoCarro extends Parqueadero {
@@ -15,8 +15,11 @@ public class ParqueaderoCarro extends Parqueadero {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@OneToMany
+	@ManyToOne
 	private Carro carro;
+
+	protected ParqueaderoCarro() {
+	}
 
 	public ParqueaderoCarro(Carro carro, LocalDateTime fechaIngreso) {
 		super(fechaIngreso);

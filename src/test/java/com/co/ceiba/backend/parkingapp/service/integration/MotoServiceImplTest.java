@@ -1,45 +1,28 @@
-package com.co.ceiba.backend.parkingapp.service.unitary;
+package com.co.ceiba.backend.parkingapp.service.integration;
 
 import static com.co.ceiba.backend.parkingapp.databuilder.MotoTestDataBuilder.aMoto;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.co.ceiba.backend.parkingapp.domain.Moto;
-import com.co.ceiba.backend.parkingapp.reposity.MotoRepository;
 import com.co.ceiba.backend.parkingapp.service.MotoService;
-import com.co.ceiba.backend.parkingapp.service.MotoServiceImpl;
 
 @RunWith(SpringRunner.class)
+@SpringBootTest
 public class MotoServiceImplTest {
-
-	@TestConfiguration
-	static class MotoServiceImplTestContextConfiguration {
-
-		@Bean
-		public MotoService getMotoService() {
-			return new MotoServiceImpl();
-		}
-	}
 
 	@Autowired
 	private MotoService motoService;
-
-	@MockBean
-	private MotoRepository motoRepository;
 
 	@Test
 	public void guardarMotoTest() {
 		// Arrange
 		Moto moto = aMoto().build();
-		Mockito.when(motoRepository.save(moto)).thenReturn(moto);
 
 		// Act
 		Moto motoAgregado = motoService.guardarMoto(moto);
@@ -53,14 +36,14 @@ public class MotoServiceImplTest {
 	@Test
 	public void obtenerMoto() {
 		// Arrange
-		Moto moto = aMoto().build();
-		Mockito.when(motoService.obtenerMoto(moto.getPlaca())).thenReturn(moto);
+		Moto motoAgregado = motoService.guardarMoto(aMoto().build());
 
 		// Act
-		Moto motoObtenido = motoService.obtenerMoto(moto.getPlaca());
+		Moto motoObtenido = motoService.obtenerMoto(motoAgregado.getPlaca());
 
 		// Assert
-		assertEquals(moto.getPlaca(), motoObtenido.getPlaca());
+		assertEquals(motoAgregado.getPlaca(), motoObtenido.getPlaca());
+		assertEquals(motoAgregado.getCilindraje(), motoObtenido.getCilindraje());
 
 	}
 

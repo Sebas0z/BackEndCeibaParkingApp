@@ -32,8 +32,8 @@ public class ValidadorParqueaderoServiceImpl implements ValidadorParqueaderoServ
 	}
 
 	@Override
-	public boolean validarCondicionDia(LocalDateTime dia) {
-		return (dia.getDayOfWeek() == DayOfWeek.MONDAY) || (dia.getDayOfWeek() == DayOfWeek.SUNDAY) ? true : false;
+	public boolean validarCondicionDia(LocalDateTime fecha) {
+		return (fecha.getDayOfWeek() == DayOfWeek.MONDAY) || (fecha.getDayOfWeek() == DayOfWeek.SUNDAY) ? true : false;
 	}
 
 }

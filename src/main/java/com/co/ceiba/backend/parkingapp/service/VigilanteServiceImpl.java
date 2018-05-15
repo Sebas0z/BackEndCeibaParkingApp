@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import com.co.ceiba.backend.parkingapp.domain.Carro;
 import com.co.ceiba.backend.parkingapp.domain.Moto;
@@ -31,14 +32,17 @@ public class VigilanteServiceImpl implements VigilanteService {
 	private ParqueaderoMotoService parqueaderoMotoService;
 
 	@Override
-	public String validarYRegistrarIngresoCarro(String placa, LocalDateTime dia) {
+	public String validarYRegistrarIngresoCarro(String placa, LocalDateTime fechaIngreso) {
+		Assert.notNull(placa, "La placa no debe ser nulo");
+		Assert.notNull(fechaIngreso, "La fecha de ingreso no debe ser nulo");
+
 		ParqueaderoCarro[] arregloParqueaderoCarro = obtenerCarrosParqueados();
 
 		if (validadorParqueaderoService.validarSiHayEspacioParaCarro(arregloParqueaderoCarro)) {
 			if (!validadorParqueaderoService.validarCondicionPlaca(placa)) {
-				return guardarParqueaderoCarro(placa, dia);
-			} else if (validadorParqueaderoService.validarCondicionDia(dia)) {
-				return guardarParqueaderoCarro(placa, dia);
+				return guardarParqueaderoCarro(placa, fechaIngreso);
+			} else if (validadorParqueaderoService.validarCondicionDia(fechaIngreso)) {
+				return guardarParqueaderoCarro(placa, fechaIngreso);
 			} else {
 				return "El carro con placa " + placa + " no esta autorizado para ingresar al parqueadero";
 			}
@@ -52,22 +56,31 @@ public class VigilanteServiceImpl implements VigilanteService {
 		return listaParqueaderoCarro.toArray(new ParqueaderoCarro[listaParqueaderoCarro.size()]);
 	}
 
-	private String guardarParqueaderoCarro(String placa, LocalDateTime dia) {
-		parqueaderoCarroService
-				.guardarParqueaderoCarro(new ParqueaderoCarro(carroService.guardarCarro(new Carro(placa)), dia));
+	private String guardarParqueaderoCarro(String placa, LocalDateTime fechaIngreso) {
+		Carro carro = carroService.obtenerCarro(placa);
+
+		if (carro == null) {
+			carro = carroService.guardarCarro(new Carro(placa));
+		}
+
+		parqueaderoCarroService.guardarParqueaderoCarro(new ParqueaderoCarro(carro, fechaIngreso));
 
 		return "Carro registrado en el parqueadero";
 	}
 
 	@Override
-	public String validarYRegistrarIngresoMoto(String placa, int cilindraje, LocalDateTime dia) {
+	public String validarYRegistrarIngresoMoto(String placa, int cilindraje, LocalDateTime fechaIngreso) {
+		Assert.notNull(placa, "La placa no debe ser nulo");
+		Assert.notNull(cilindraje, "El cilindraje no debe ser nulo");
+		Assert.notNull(fechaIngreso, "La fecha de ingreso no debe ser nulo");
+
 		ParqueaderoMoto[] arregloParqueaderoMoto = obtenerMotosParqueadas();
 
 		if (validadorParqueaderoService.validarSiHayEspacioParaMoto(arregloParqueaderoMoto)) {
 			if (!validadorParqueaderoService.validarCondicionPlaca(placa)) {
-				return guardarParqueaderoMoto(placa, cilindraje, dia);
-			} else if (validadorParqueaderoService.validarCondicionDia(dia)) {
-				return guardarParqueaderoMoto(placa, cilindraje, dia);
+				return guardarParqueaderoMoto(placa, cilindraje, fechaIngreso);
+			} else if (validadorParqueaderoService.validarCondicionDia(fechaIngreso)) {
+				return guardarParqueaderoMoto(placa, cilindraje, fechaIngreso);
 			} else {
 				return "La moto con placa " + placa + " no esta autorizado para ingresar al parqueadero";
 			}
@@ -81,15 +94,23 @@ public class VigilanteServiceImpl implements VigilanteService {
 		return listaParqueaderoMoto.toArray(new ParqueaderoMoto[listaParqueaderoMoto.size()]);
 	}
 
-	private String guardarParqueaderoMoto(String placa, int cilindraje, LocalDateTime dia) {
-		parqueaderoMotoService
-				.guardarParqueaderoMoto(new ParqueaderoMoto(motoService.guardarMoto(new Moto(placa, cilindraje)), dia));
+	private String guardarParqueaderoMoto(String placa, int cilindraje, LocalDateTime fechaIngreso) {
+		Moto moto = motoService.obtenerMoto(placa);
 
-		return "Moto registrado en el parqueadero";
+		if (moto == null) {
+			moto = motoService.guardarMoto(new Moto(placa, cilindraje));
+		}
+
+		parqueaderoMotoService.guardarParqueaderoMoto(new ParqueaderoMoto(moto, fechaIngreso));
+
+		return "Moto registrada en el parqueadero";
 	}
 
 	@Override
 	public String cobrarRetiroCarro(String placa, LocalDateTime fechaRetiro) {
+		Assert.notNull(placa, "La placa no debe ser nulo");
+		Assert.notNull(fechaRetiro, "La fecha de retiro no debe ser nulo");
+
 		ParqueaderoCarro parqueaderoCarro = obtenerCarroParqueado(placa);
 
 		double diferenciaHoras = (double) ChronoUnit.HOURS.between(parqueaderoCarro.getFechaIngreso(), fechaRetiro);
@@ -99,6 +120,8 @@ public class VigilanteServiceImpl implements VigilanteService {
 		double valorTotalDias = dias * 8000;
 		double valorTotalHoras = horas < 9 ? horas * 1000 : 8000;
 		double valorTotal = valorTotalDias + valorTotalHoras;
+
+		parqueaderoCarro.setFechaRetiro(fechaRetiro);
 
 		parqueaderoCarroService.guardarParqueaderoCarro(parqueaderoCarro);
 
@@ -112,6 +135,9 @@ public class VigilanteServiceImpl implements VigilanteService {
 
 	@Override
 	public String cobrarRetiroMoto(String placa, LocalDateTime fechaRetiro) {
+		Assert.notNull(placa, "La placa no debe ser nulo");
+		Assert.notNull(fechaRetiro, "La fecha de retiro no debe ser nulo");
+
 		ParqueaderoMoto parqueaderoMoto = obtenerMotoParqueada(placa);
 
 		double diferenciaHoras = (double) ChronoUnit.HOURS.between(parqueaderoMoto.getFechaIngreso(), fechaRetiro);
@@ -125,6 +151,8 @@ public class VigilanteServiceImpl implements VigilanteService {
 		if (parqueaderoMoto.getMoto().getCilindraje() > 500) {
 			valorTotal += 2000;
 		}
+
+		parqueaderoMoto.setFechaRetiro(fechaRetiro);
 
 		parqueaderoMotoService.guardarParqueaderoMoto(parqueaderoMoto);
 

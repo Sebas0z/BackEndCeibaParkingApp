@@ -1,51 +1,40 @@
-package com.co.ceiba.backend.parkingapp.service.unitary;
+package com.co.ceiba.backend.parkingapp.service.integration;
 
 import static com.co.ceiba.backend.parkingapp.databuilder.MotoTestDataBuilder.aMoto;
 import static com.co.ceiba.backend.parkingapp.databuilder.ParqueaderoMotoTestDataBuilder.aParqueaderoMoto;
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.co.ceiba.backend.parkingapp.domain.Moto;
 import com.co.ceiba.backend.parkingapp.domain.ParqueaderoMoto;
-import com.co.ceiba.backend.parkingapp.reposity.ParqueaderoMotoRepository;
+import com.co.ceiba.backend.parkingapp.service.MotoService;
 import com.co.ceiba.backend.parkingapp.service.ParqueaderoMotoService;
-import com.co.ceiba.backend.parkingapp.service.ParqueaderoMotoServiceImpl;
 
 @RunWith(SpringRunner.class)
+@SpringBootTest
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ParqueaderoMotoServiceImplTest {
-
-	@TestConfiguration
-	static class ParqueaderoMotoServiceImplTestContextConfiguration {
-
-		@Bean
-		public ParqueaderoMotoService getParqueaderoMotoService() {
-			return new ParqueaderoMotoServiceImpl();
-		}
-	}
 
 	@Autowired
 	private ParqueaderoMotoService parqueaderoMotoService;
 
-	@MockBean
-	private ParqueaderoMotoRepository parqueaderoMotoRepository;
+	@Autowired
+	private MotoService motoService;
 
 	@Test
-	public void guardarParqueaderoMotoTest() {
+	public void Test1GuardarParqueaderoMotoTest() {
 		// Arrange
-		Moto moto = aMoto().build();
+		Moto moto = motoService.guardarMoto(aMoto().build());
 		ParqueaderoMoto parqueaderoMoto = aParqueaderoMoto().withMoto(moto).build();
-		Mockito.when(parqueaderoMotoRepository.save(parqueaderoMoto)).thenReturn(parqueaderoMoto);
 
 		// Act
 		ParqueaderoMoto parqueaderoMotoAgregado = parqueaderoMotoService.guardarParqueaderoMoto(parqueaderoMoto);
@@ -56,28 +45,29 @@ public class ParqueaderoMotoServiceImplTest {
 	}
 
 	@Test
-	public void obtenerMotosParqueadasTest() {
+	public void Test2ObtenerMotosParqueadasTest() {
 		// Arrange
-		Moto moto = aMoto().build();
+		Moto moto = motoService.guardarMoto(aMoto().build());
 		ParqueaderoMoto parqueaderoMoto = aParqueaderoMoto().withMoto(moto).build();
-		List<ParqueaderoMoto> listParqueaderoMoto = new ArrayList<>();
-		listParqueaderoMoto.add(parqueaderoMoto);
 
-		Mockito.when(parqueaderoMotoRepository.findByFechaRetiroIsNull()).thenReturn(listParqueaderoMoto);
+		parqueaderoMotoService.guardarParqueaderoMoto(parqueaderoMoto);
+
+		ParqueaderoMoto parqueaderoMoto2 = aParqueaderoMoto().withMoto(moto).build();
+		parqueaderoMotoService.guardarParqueaderoMoto(parqueaderoMoto2);
 
 		// Act
 		List<ParqueaderoMoto> parqueaderoMotoObtenidos = parqueaderoMotoService.obtenerMotosParqueadas();
 
 		// Assert
-		assertEquals(1, parqueaderoMotoObtenidos.size());
+		assertEquals(3, parqueaderoMotoObtenidos.size());
 	}
 
 	@Test
-	public void obtenerMotoParqueadoTest() {
+	public void Test3ObtenerMotoParqueadoTest() {
 		// Arrange
-		Moto moto = aMoto().build();
+		Moto moto = motoService.guardarMoto(aMoto().build());
 		ParqueaderoMoto parqueaderoMoto = aParqueaderoMoto().withMoto(moto).build();
-		Mockito.when(parqueaderoMotoRepository.findByMotoAndFechaRetiroIsNull(moto)).thenReturn(parqueaderoMoto);
+		parqueaderoMotoService.guardarParqueaderoMoto(parqueaderoMoto);
 
 		// Act
 		ParqueaderoMoto parqueaderoMotoObtenido = parqueaderoMotoService.obtenerMotoParqueada(moto);

@@ -13,6 +13,6 @@ public interface ValidadorParqueaderoService {
 
 	public boolean validarCondicionPlaca(String placa);
 
-	public boolean validarCondicionDia(LocalDateTime dia);
+	public boolean validarCondicionDia(LocalDateTime fecha);
 
 }

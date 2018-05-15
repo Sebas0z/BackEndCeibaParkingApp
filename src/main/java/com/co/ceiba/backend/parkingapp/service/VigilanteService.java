@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 
 public interface VigilanteService {
 
-	public String validarYRegistrarIngresoCarro(String placa, LocalDateTime dia);
+	public String validarYRegistrarIngresoCarro(String placa, LocalDateTime fechaIngreso);
 
-	public String validarYRegistrarIngresoMoto(String placa, int cilindraje, LocalDateTime dia);
+	public String validarYRegistrarIngresoMoto(String placa, int cilindraje, LocalDateTime fechaIngreso);
 
 	public String cobrarRetiroCarro(String placa, LocalDateTime fechaRetiro);
 

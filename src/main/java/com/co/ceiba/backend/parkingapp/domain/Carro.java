@@ -12,6 +12,9 @@ public class Carro extends Vehiculo {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	protected Carro() {
+	}
+
 	public Carro(String placa) {
 		super(placa);
 	}

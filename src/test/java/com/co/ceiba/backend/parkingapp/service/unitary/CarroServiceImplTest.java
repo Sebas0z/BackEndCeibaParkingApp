@@ -36,7 +36,7 @@ public class CarroServiceImplTest {
 	private CarroRepository CarroRepository;
 
 	@Test
-	public void agregarCarroTest() {
+	public void guardarCarroTest() {
 		// Arrange
 		Carro carro = aCarro().build();
 		Mockito.when(CarroRepository.save(carro)).thenReturn(carro);
