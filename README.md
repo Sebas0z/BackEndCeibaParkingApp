@@ -1,4 +1,4 @@
-# BackEnd-CeibaParkingApp
+# BackEnd Ceiba Parking App
 
 ## INADN-1393
 
