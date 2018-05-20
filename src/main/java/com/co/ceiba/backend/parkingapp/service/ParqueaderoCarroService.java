@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.co.ceiba.backend.parkingapp.domain.Carro;
 import com.co.ceiba.backend.parkingapp.domain.ParqueaderoCarro;
+import com.co.ceiba.backend.parkingapp.dto.CarroDTO;
 
 public interface ParqueaderoCarroService {
 
@@ -11,6 +12,6 @@ public interface ParqueaderoCarroService {
 
 	public List<ParqueaderoCarro> obtenerCarrosParqueados();
 
-	public ParqueaderoCarro obtenerCarroParqueado(Carro carro);
+	public ParqueaderoCarro obtenerCarroParqueado(CarroDTO carro);
 
 }

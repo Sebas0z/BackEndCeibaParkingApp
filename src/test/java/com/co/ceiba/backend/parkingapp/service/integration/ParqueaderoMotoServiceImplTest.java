@@ -16,8 +16,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.co.ceiba.backend.parkingapp.domain.Moto;
 import com.co.ceiba.backend.parkingapp.domain.ParqueaderoMoto;
-import com.co.ceiba.backend.parkingapp.service.MotoService;
+import com.co.ceiba.backend.parkingapp.dto.MotoDTO;
 import com.co.ceiba.backend.parkingapp.service.ParqueaderoMotoService;
+import com.co.ceiba.backend.parkingapp.service.VehiculoService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -28,12 +29,12 @@ public class ParqueaderoMotoServiceImplTest {
 	private ParqueaderoMotoService parqueaderoMotoService;
 
 	@Autowired
-	private MotoService motoService;
+	private VehiculoService<MotoDTO> motoService;
 
 	@Test
 	public void Test1GuardarParqueaderoMotoTest() {
 		// Arrange
-		Moto moto = motoService.guardarMoto(aMoto().build());
+		MotoDTO moto = motoService.guardarVehiculo(aMoto().build());
 		ParqueaderoMoto parqueaderoMoto = aParqueaderoMoto().withMoto(moto).build();
 
 		// Act
@@ -47,7 +48,7 @@ public class ParqueaderoMotoServiceImplTest {
 	@Test
 	public void Test2ObtenerMotosParqueadasTest() {
 		// Arrange
-		Moto moto = motoService.guardarMoto(aMoto().build());
+		MotoDTO moto = motoService.guardarVehiculo(aMoto().build());
 		ParqueaderoMoto parqueaderoMoto = aParqueaderoMoto().withMoto(moto).build();
 
 		parqueaderoMotoService.guardarParqueaderoMoto(parqueaderoMoto);
@@ -65,7 +66,7 @@ public class ParqueaderoMotoServiceImplTest {
 	@Test
 	public void Test3ObtenerMotoParqueadoTest() {
 		// Arrange
-		Moto moto = motoService.guardarMoto(aMoto().build());
+		MotoDTO moto = motoService.guardarVehiculo(aMoto().build());
 		ParqueaderoMoto parqueaderoMoto = aParqueaderoMoto().withMoto(moto).build();
 		parqueaderoMotoService.guardarParqueaderoMoto(parqueaderoMoto);
 

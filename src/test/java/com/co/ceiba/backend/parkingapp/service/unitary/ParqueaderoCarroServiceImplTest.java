@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.co.ceiba.backend.parkingapp.domain.Carro;
 import com.co.ceiba.backend.parkingapp.domain.ParqueaderoCarro;
+import com.co.ceiba.backend.parkingapp.dto.CarroDTO;
 import com.co.ceiba.backend.parkingapp.reposity.ParqueaderoCarroRepository;
 import com.co.ceiba.backend.parkingapp.service.ParqueaderoCarroService;
 import com.co.ceiba.backend.parkingapp.service.ParqueaderoCarroServiceImpl;
@@ -43,7 +44,7 @@ public class ParqueaderoCarroServiceImplTest {
 	@Test
 	public void guardarParqueaderoCarroTest() {
 		// Arrange
-		Carro carro = aCarro().build();
+		CarroDTO carro = aCarro().build();
 		ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withCarro(carro).build();
 		Mockito.when(parqueaderoCarroRepository.save(parqueaderoCarro)).thenReturn(parqueaderoCarro);
 
@@ -57,7 +58,7 @@ public class ParqueaderoCarroServiceImplTest {
 	@Test
 	public void obtenerCarrosParqueadosTest() {
 		// Arrange
-		Carro carro = aCarro().build();
+		CarroDTO carro = aCarro().build();
 		ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withCarro(carro).build();
 		List<ParqueaderoCarro> listaParqueaderoCarro = new ArrayList<>();
 		listaParqueaderoCarro.add(parqueaderoCarro);
@@ -74,9 +75,9 @@ public class ParqueaderoCarroServiceImplTest {
 	@Test
 	public void obtenerCarroParqueadoTest() {
 		// Arrange
-		Carro carro = aCarro().build();
+		CarroDTO carro = aCarro().build();
 		ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withCarro(carro).build();
-		Mockito.when(parqueaderoCarroRepository.findByCarroAndFechaRetiroIsNull(carro)).thenReturn(parqueaderoCarro);
+		Mockito.when(parqueaderoCarroRepository.findByCarroAndFechaRetiroIsNull(Mockito.any())).thenReturn(parqueaderoCarro);
 
 		// Act
 		ParqueaderoCarro parqueaderoCarroObtenido = parqueaderoCarroService.obtenerCarroParqueado(carro);

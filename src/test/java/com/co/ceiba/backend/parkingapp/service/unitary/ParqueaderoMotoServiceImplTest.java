@@ -16,8 +16,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.co.ceiba.backend.parkingapp.domain.Moto;
 import com.co.ceiba.backend.parkingapp.domain.ParqueaderoMoto;
+import com.co.ceiba.backend.parkingapp.dto.MotoDTO;
 import com.co.ceiba.backend.parkingapp.reposity.ParqueaderoMotoRepository;
 import com.co.ceiba.backend.parkingapp.service.ParqueaderoMotoService;
 import com.co.ceiba.backend.parkingapp.service.ParqueaderoMotoServiceImpl;
@@ -43,7 +43,7 @@ public class ParqueaderoMotoServiceImplTest {
 	@Test
 	public void guardarParqueaderoMotoTest() {
 		// Arrange
-		Moto moto = aMoto().build();
+		MotoDTO moto = aMoto().build();
 		ParqueaderoMoto parqueaderoMoto = aParqueaderoMoto().withMoto(moto).build();
 		Mockito.when(parqueaderoMotoRepository.save(parqueaderoMoto)).thenReturn(parqueaderoMoto);
 
@@ -58,7 +58,7 @@ public class ParqueaderoMotoServiceImplTest {
 	@Test
 	public void obtenerMotosParqueadasTest() {
 		// Arrange
-		Moto moto = aMoto().build();
+		MotoDTO moto = aMoto().build();
 		ParqueaderoMoto parqueaderoMoto = aParqueaderoMoto().withMoto(moto).build();
 		List<ParqueaderoMoto> listParqueaderoMoto = new ArrayList<>();
 		listParqueaderoMoto.add(parqueaderoMoto);
@@ -75,9 +75,10 @@ public class ParqueaderoMotoServiceImplTest {
 	@Test
 	public void obtenerMotoParqueadoTest() {
 		// Arrange
-		Moto moto = aMoto().build();
+		MotoDTO moto = aMoto().build();
 		ParqueaderoMoto parqueaderoMoto = aParqueaderoMoto().withMoto(moto).build();
-		Mockito.when(parqueaderoMotoRepository.findByMotoAndFechaRetiroIsNull(moto)).thenReturn(parqueaderoMoto);
+		Mockito.when(parqueaderoMotoRepository.findByMotoAndFechaRetiroIsNull(Mockito.any()))
+				.thenReturn(parqueaderoMoto);
 
 		// Act
 		ParqueaderoMoto parqueaderoMotoObtenido = parqueaderoMotoService.obtenerMotoParqueada(moto);

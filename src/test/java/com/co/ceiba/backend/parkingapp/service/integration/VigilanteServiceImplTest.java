@@ -20,10 +20,11 @@ import com.co.ceiba.backend.parkingapp.domain.Carro;
 import com.co.ceiba.backend.parkingapp.domain.Moto;
 import com.co.ceiba.backend.parkingapp.domain.ParqueaderoCarro;
 import com.co.ceiba.backend.parkingapp.domain.ParqueaderoMoto;
-import com.co.ceiba.backend.parkingapp.service.CarroService;
-import com.co.ceiba.backend.parkingapp.service.MotoService;
+import com.co.ceiba.backend.parkingapp.dto.CarroDTO;
+import com.co.ceiba.backend.parkingapp.dto.MotoDTO;
 import com.co.ceiba.backend.parkingapp.service.ParqueaderoCarroService;
 import com.co.ceiba.backend.parkingapp.service.ParqueaderoMotoService;
+import com.co.ceiba.backend.parkingapp.service.VehiculoService;
 import com.co.ceiba.backend.parkingapp.service.VigilanteService;
 
 @RunWith(SpringRunner.class)
@@ -47,10 +48,10 @@ public class VigilanteServiceImplTest {
 	private VigilanteService vigilanteService;
 
 	@Autowired
-	private CarroService carroService;
+	private VehiculoService<CarroDTO> carroService;
 
 	@Autowired
-	private MotoService motoService;
+	private VehiculoService<MotoDTO> motoService;
 
 	@Autowired
 	private ParqueaderoCarroService parqueaderoCarroService;
@@ -149,7 +150,7 @@ public class VigilanteServiceImplTest {
 	@Test
 	public void Test17ValidarYRegistrarIngresoCarroSinEspacioTest() {
 		// Arrange
-		Carro carro = carroService.guardarCarro(aCarro().build());
+		CarroDTO carro = carroService.guardarVehiculo(aCarro().build());
 
 		for (int i = 3; i <= MAXIMA_CANTIDAD_CARROS; i++) {
 			ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withCarro(carro).build();
@@ -268,7 +269,7 @@ public class VigilanteServiceImplTest {
 	@Test
 	public void Test28ValidarYRegistrarIngresoMotoSinEspacioTest() {
 		// Arrange
-		Moto moto = motoService.guardarMoto(aMoto().build());
+		MotoDTO moto = motoService.guardarVehiculo(aMoto().build());
 
 		for (int i = 3; i <= 20; i++) {
 			ParqueaderoMoto parqueaderoMoto = aParqueaderoMoto().withMoto(moto).build();

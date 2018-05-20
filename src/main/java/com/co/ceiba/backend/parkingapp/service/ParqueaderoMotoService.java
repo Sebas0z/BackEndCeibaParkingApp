@@ -2,8 +2,8 @@ package com.co.ceiba.backend.parkingapp.service;
 
 import java.util.List;
 
-import com.co.ceiba.backend.parkingapp.domain.Moto;
 import com.co.ceiba.backend.parkingapp.domain.ParqueaderoMoto;
+import com.co.ceiba.backend.parkingapp.dto.MotoDTO;
 
 public interface ParqueaderoMotoService {
 
@@ -11,5 +11,5 @@ public interface ParqueaderoMotoService {
 
 	public List<ParqueaderoMoto> obtenerMotosParqueadas();
 
-	public ParqueaderoMoto obtenerMotoParqueada(Moto moto);
+	public ParqueaderoMoto obtenerMotoParqueada(MotoDTO moto);
 }

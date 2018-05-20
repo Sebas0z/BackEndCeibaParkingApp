@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.co.ceiba.backend.parkingapp.domain.Carro;
 import com.co.ceiba.backend.parkingapp.domain.Moto;
+import com.co.ceiba.backend.parkingapp.dto.CarroDTO;
+import com.co.ceiba.backend.parkingapp.dto.MotoDTO;
 import com.co.ceiba.backend.parkingapp.service.VigilanteService;
 import com.co.ceiba.backend.parkingapp.web.VigilanteRestController;
 
@@ -36,7 +38,7 @@ public class VigilanteRestControllerTest {
 	@Test
 	public void ingresarCarro() throws Exception {
 		// Arrange
-		Carro carro = aCarro().build();
+		CarroDTO carro = aCarro().build();
 		Mockito.when(vigilanteService.validarYRegistrarIngresoCarro(Mockito.anyString(), Mockito.any()))
 				.thenReturn("Carro registrado en el parqueadero");
 
@@ -48,7 +50,7 @@ public class VigilanteRestControllerTest {
 	@Test
 	public void ingresarMoto() throws Exception {
 		// Arrange
-		Moto moto = aMoto().build();
+		MotoDTO moto = aMoto().build();
 		Mockito.when(
 				vigilanteService.validarYRegistrarIngresoMoto(Mockito.anyString(), Mockito.anyInt(), Mockito.any()))
 				.thenReturn("Moto registrada en el parqueadero");
@@ -62,7 +64,7 @@ public class VigilanteRestControllerTest {
 	@Test
 	public void cobrarRetiroCarro() throws Exception {
 		// Arrange
-		Carro carro = aCarro().build();
+		CarroDTO carro = aCarro().build();
 		Mockito.when(vigilanteService.cobrarRetiroCarro(Mockito.anyString(), Mockito.any())).thenReturn("11000");
 
 		// Act & Assert
@@ -73,7 +75,7 @@ public class VigilanteRestControllerTest {
 	@Test
 	public void cobrarRetiroMoto() throws Exception {
 		// Arrange
-		Moto moto = aMoto().build();
+		MotoDTO moto = aMoto().build();
 		Mockito.when(vigilanteService.cobrarRetiroMoto(Mockito.anyString(), Mockito.any())).thenReturn("6000");
 
 		// Act & Assert

@@ -16,8 +16,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.co.ceiba.backend.parkingapp.domain.Carro;
 import com.co.ceiba.backend.parkingapp.domain.ParqueaderoCarro;
-import com.co.ceiba.backend.parkingapp.service.CarroService;
+import com.co.ceiba.backend.parkingapp.dto.CarroDTO;
 import com.co.ceiba.backend.parkingapp.service.ParqueaderoCarroService;
+import com.co.ceiba.backend.parkingapp.service.VehiculoService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -28,12 +29,12 @@ public class ParqueaderoCarroServiceImplTest {
 	private ParqueaderoCarroService parqueaderoCarroService;
 
 	@Autowired
-	private CarroService carroService;
+	private VehiculoService<CarroDTO> carroService;
 
 	@Test
 	public void Test1GuardarParqueaderoCarroTest() {
 		// Arrange
-		Carro carro = carroService.guardarCarro(aCarro().build());
+		CarroDTO carro = carroService.guardarVehiculo(aCarro().build());
 		ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withCarro(carro).build();
 
 		// Act
@@ -46,7 +47,7 @@ public class ParqueaderoCarroServiceImplTest {
 	@Test
 	public void Test2ObtenerCarrosParqueadosTest() {
 		// Arrange
-		Carro carro = carroService.guardarCarro(aCarro().build());
+		CarroDTO carro = carroService.guardarVehiculo(aCarro().build());
 		ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withCarro(carro).build();
 		parqueaderoCarroService.guardarParqueaderoCarro(parqueaderoCarro);
 
@@ -63,7 +64,7 @@ public class ParqueaderoCarroServiceImplTest {
 	@Test
 	public void Test3ObtenerCarroParqueadoTest() {
 		// Arrange
-		Carro carro = carroService.guardarCarro(aCarro().build());
+		CarroDTO carro = carroService.guardarVehiculo(aCarro().build());
 		ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withCarro(carro).build();
 		parqueaderoCarroService.guardarParqueaderoCarro(parqueaderoCarro);
 

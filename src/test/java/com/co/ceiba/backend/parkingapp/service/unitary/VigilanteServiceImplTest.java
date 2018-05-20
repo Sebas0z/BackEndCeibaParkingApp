@@ -21,11 +21,12 @@ import com.co.ceiba.backend.parkingapp.domain.Carro;
 import com.co.ceiba.backend.parkingapp.domain.Moto;
 import com.co.ceiba.backend.parkingapp.domain.ParqueaderoCarro;
 import com.co.ceiba.backend.parkingapp.domain.ParqueaderoMoto;
-import com.co.ceiba.backend.parkingapp.service.CarroService;
-import com.co.ceiba.backend.parkingapp.service.MotoService;
+import com.co.ceiba.backend.parkingapp.dto.CarroDTO;
+import com.co.ceiba.backend.parkingapp.dto.MotoDTO;
 import com.co.ceiba.backend.parkingapp.service.ParqueaderoCarroService;
 import com.co.ceiba.backend.parkingapp.service.ParqueaderoMotoService;
 import com.co.ceiba.backend.parkingapp.service.ValidadorParqueaderoService;
+import com.co.ceiba.backend.parkingapp.service.VehiculoService;
 import com.co.ceiba.backend.parkingapp.service.VigilanteService;
 import com.co.ceiba.backend.parkingapp.service.VigilanteServiceImpl;
 
@@ -56,10 +57,10 @@ public class VigilanteServiceImplTest {
 	private VigilanteService vigilanteService;
 
 	@MockBean
-	private CarroService carroService;
+	private VehiculoService<CarroDTO> carroService;
 
 	@MockBean
-	private MotoService motoService;
+	private VehiculoService<MotoDTO> motoService;
 
 	@MockBean
 	private ParqueaderoCarroService parqueaderoCarroService;
@@ -182,10 +183,10 @@ public class VigilanteServiceImplTest {
 		// Arrange
 		LocalDateTime fechaIngreso = LocalDateTime.of(2018, 5, 13, 15, 5);
 		LocalDateTime fechaRetiro = LocalDateTime.of(2018, 5, 13, 18, 5);
-		Carro carro = aCarro().build();
+		CarroDTO carro = aCarro().build();
 		ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withFechaIngreso(fechaIngreso).build();
 
-		Mockito.when(carroService.obtenerCarro(Mockito.anyString())).thenReturn(carro);
+		Mockito.when(carroService.buscarVehiculoPorPlaca(Mockito.anyString())).thenReturn(carro);
 		Mockito.when(parqueaderoCarroService.obtenerCarroParqueado(Mockito.any())).thenReturn(parqueaderoCarro);
 
 		// Act
@@ -200,10 +201,10 @@ public class VigilanteServiceImplTest {
 		// Arrange
 		LocalDateTime fechaIngreso = LocalDateTime.of(2018, 5, 13, 13, 5);
 		LocalDateTime fechaRetiro = LocalDateTime.of(2018, 5, 13, 23, 5);
-		Carro carro = aCarro().build();
+		CarroDTO carro = aCarro().build();
 		ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withFechaIngreso(fechaIngreso).build();
 
-		Mockito.when(carroService.obtenerCarro(Mockito.anyString())).thenReturn(carro);
+		Mockito.when(carroService.buscarVehiculoPorPlaca(Mockito.anyString())).thenReturn(carro);
 		Mockito.when(parqueaderoCarroService.obtenerCarroParqueado(Mockito.any())).thenReturn(parqueaderoCarro);
 
 		// Act
@@ -218,10 +219,10 @@ public class VigilanteServiceImplTest {
 		// Arrange
 		LocalDateTime fechaIngreso = LocalDateTime.of(2018, 5, 12, 13, 5);
 		LocalDateTime fechaRetiro = LocalDateTime.of(2018, 5, 13, 16, 5);
-		Carro carro = aCarro().build();
+		CarroDTO carro = aCarro().build();
 		ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withFechaIngreso(fechaIngreso).build();
 
-		Mockito.when(carroService.obtenerCarro(Mockito.anyString())).thenReturn(carro);
+		Mockito.when(carroService.buscarVehiculoPorPlaca(Mockito.anyString())).thenReturn(carro);
 		Mockito.when(parqueaderoCarroService.obtenerCarroParqueado(Mockito.any())).thenReturn(parqueaderoCarro);
 
 		// Act
@@ -236,10 +237,10 @@ public class VigilanteServiceImplTest {
 		// Arrange
 		LocalDateTime fechaIngreso = LocalDateTime.of(2018, 5, 13, 15, 5);
 		LocalDateTime fechaRetiro = LocalDateTime.of(2018, 5, 13, 15, 6);
-		Carro carro = aCarro().build();
+		CarroDTO carro = aCarro().build();
 		ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withFechaIngreso(fechaIngreso).build();
 
-		Mockito.when(carroService.obtenerCarro(Mockito.anyString())).thenReturn(carro);
+		Mockito.when(carroService.buscarVehiculoPorPlaca(Mockito.anyString())).thenReturn(carro);
 		Mockito.when(parqueaderoCarroService.obtenerCarroParqueado(Mockito.any())).thenReturn(parqueaderoCarro);
 
 		// Act
@@ -254,10 +255,10 @@ public class VigilanteServiceImplTest {
 		// Arrange
 		LocalDateTime fechaIngreso = LocalDateTime.of(2018, 5, 13, 15, 5);
 		LocalDateTime fechaRetiro = LocalDateTime.of(2018, 5, 13, 18, 5);
-		Moto moto = aMoto().build();
+		MotoDTO moto = aMoto().build();
 		ParqueaderoMoto parqueaderoMoto = aParqueaderoMoto().withMoto(moto).withFechaIngreso(fechaIngreso).build();
 
-		Mockito.when(motoService.obtenerMoto(Mockito.anyString())).thenReturn(moto);
+		Mockito.when(motoService.buscarVehiculoPorPlaca(Mockito.anyString())).thenReturn(moto);
 		Mockito.when(parqueaderoMotoService.obtenerMotoParqueada(Mockito.any())).thenReturn(parqueaderoMoto);
 
 		// Act
@@ -272,10 +273,10 @@ public class VigilanteServiceImplTest {
 		// Arrange
 		LocalDateTime fechaIngreso = LocalDateTime.of(2018, 5, 13, 13, 5);
 		LocalDateTime fechaRetiro = LocalDateTime.of(2018, 5, 13, 23, 5);
-		Moto moto = aMoto().build();
+		MotoDTO moto = aMoto().build();
 		ParqueaderoMoto parqueaderoMoto = aParqueaderoMoto().withMoto(moto).withFechaIngreso(fechaIngreso).build();
 
-		Mockito.when(motoService.obtenerMoto(Mockito.anyString())).thenReturn(moto);
+		Mockito.when(motoService.buscarVehiculoPorPlaca(Mockito.anyString())).thenReturn(moto);
 		Mockito.when(parqueaderoMotoService.obtenerMotoParqueada(Mockito.any())).thenReturn(parqueaderoMoto);
 
 		// Act
@@ -290,10 +291,10 @@ public class VigilanteServiceImplTest {
 		// Arrange
 		LocalDateTime fechaIngreso = LocalDateTime.of(2018, 5, 12, 13, 5);
 		LocalDateTime fechaRetiro = LocalDateTime.of(2018, 5, 13, 16, 5);
-		Moto moto = aMoto().build();
+		MotoDTO moto = aMoto().build();
 		ParqueaderoMoto parqueaderoMoto = aParqueaderoMoto().withMoto(moto).withFechaIngreso(fechaIngreso).build();
 
-		Mockito.when(motoService.obtenerMoto(Mockito.anyString())).thenReturn(moto);
+		Mockito.when(motoService.buscarVehiculoPorPlaca(Mockito.anyString())).thenReturn(moto);
 		Mockito.when(parqueaderoMotoService.obtenerMotoParqueada(Mockito.any())).thenReturn(parqueaderoMoto);
 
 		// Act
@@ -308,10 +309,10 @@ public class VigilanteServiceImplTest {
 		// Arrange
 		LocalDateTime fechaIngreso = LocalDateTime.of(2018, 5, 13, 13, 5);
 		LocalDateTime fechaRetiro = LocalDateTime.of(2018, 5, 13, 23, 5);
-		Moto moto = aMoto().withCilindraje(650).build();
+		MotoDTO moto = aMoto().withCilindraje(650).build();
 		ParqueaderoMoto parqueaderoMoto = aParqueaderoMoto().withMoto(moto).withFechaIngreso(fechaIngreso).build();
 
-		Mockito.when(motoService.obtenerMoto(Mockito.anyString())).thenReturn(moto);
+		Mockito.when(motoService.buscarVehiculoPorPlaca(Mockito.anyString())).thenReturn(moto);
 		Mockito.when(parqueaderoMotoService.obtenerMotoParqueada(Mockito.any())).thenReturn(parqueaderoMoto);
 
 		// Act
@@ -326,10 +327,10 @@ public class VigilanteServiceImplTest {
 		// Arrange
 		LocalDateTime fechaIngreso = LocalDateTime.of(2018, 5, 13, 15, 5);
 		LocalDateTime fechaRetiro = LocalDateTime.of(2018, 5, 13, 15, 6);
-		Moto moto = aMoto().build();
+		MotoDTO moto = aMoto().build();
 		ParqueaderoMoto parqueaderoMoto = aParqueaderoMoto().withMoto(moto).withFechaIngreso(fechaIngreso).build();
 
-		Mockito.when(motoService.obtenerMoto(Mockito.anyString())).thenReturn(moto);
+		Mockito.when(motoService.buscarVehiculoPorPlaca(Mockito.anyString())).thenReturn(moto);
 		Mockito.when(parqueaderoMotoService.obtenerMotoParqueada(Mockito.any())).thenReturn(parqueaderoMoto);
 
 		// Act

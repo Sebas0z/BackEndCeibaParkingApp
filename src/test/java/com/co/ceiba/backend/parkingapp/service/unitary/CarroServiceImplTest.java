@@ -6,6 +6,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -13,9 +14,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.co.ceiba.backend.parkingapp.domain.Carro;
+import com.co.ceiba.backend.parkingapp.dto.CarroDTO;
 import com.co.ceiba.backend.parkingapp.reposity.CarroRepository;
-import com.co.ceiba.backend.parkingapp.service.CarroService;
 import com.co.ceiba.backend.parkingapp.service.CarroServiceImpl;
+import com.co.ceiba.backend.parkingapp.service.VehiculoService;
 
 @RunWith(SpringRunner.class)
 public class CarroServiceImplTest {
@@ -24,25 +26,27 @@ public class CarroServiceImplTest {
 	static class CarroServiceImplTestContextConfiguration {
 
 		@Bean
-		public CarroService getCarroService() {
+		public VehiculoService<CarroDTO> getCarroService() {
 			return new CarroServiceImpl();
 		}
 	}
 
 	@Autowired
-	private CarroService carroService;
+	private VehiculoService<CarroDTO> carroService;
 
 	@MockBean
-	private CarroRepository CarroRepository;
+	private CarroRepository carroRepository;
+
+	private ModelMapper modelMapper = new ModelMapper();
 
 	@Test
 	public void guardarCarroTest() {
 		// Arrange
-		Carro carro = aCarro().build();
-		Mockito.when(CarroRepository.save(carro)).thenReturn(carro);
+		CarroDTO carro = aCarro().build();
 
 		// Act
-		Carro carroAgregado = carroService.guardarCarro(carro);
+		Mockito.when(carroRepository.save(Mockito.any())).thenReturn(modelMapper.map(carro, Carro.class));
+		CarroDTO carroAgregado = carroService.guardarVehiculo(carro);
 
 		// Assert
 		assertEquals(carro.getPlaca(), carroAgregado.getPlaca());
@@ -51,11 +55,11 @@ public class CarroServiceImplTest {
 	@Test
 	public void obtenerCarro() {
 		// Arrange
-		Carro carro = aCarro().build();
-		Mockito.when(carroService.obtenerCarro(carro.getPlaca())).thenReturn(carro);
+		CarroDTO carro = aCarro().build();
 
 		// Act
-		Carro carroObtenido = carroService.obtenerCarro(carro.getPlaca());
+		Mockito.when(carroRepository.findByPlaca(carro.getPlaca())).thenReturn(modelMapper.map(carro, Carro.class));
+		CarroDTO carroObtenido = carroService.buscarVehiculoPorPlaca(carro.getPlaca());
 
 		// Assert
 		assertEquals(carro.getPlaca(), carroObtenido.getPlaca());

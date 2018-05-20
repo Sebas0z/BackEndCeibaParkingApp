@@ -5,6 +5,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -12,6 +13,8 @@ import com.co.ceiba.backend.parkingapp.domain.Carro;
 import com.co.ceiba.backend.parkingapp.domain.Moto;
 import com.co.ceiba.backend.parkingapp.domain.ParqueaderoCarro;
 import com.co.ceiba.backend.parkingapp.domain.ParqueaderoMoto;
+import com.co.ceiba.backend.parkingapp.dto.CarroDTO;
+import com.co.ceiba.backend.parkingapp.dto.MotoDTO;
 
 @Service("vigilanteService")
 public class VigilanteServiceImpl implements VigilanteService {
@@ -20,10 +23,10 @@ public class VigilanteServiceImpl implements VigilanteService {
 	private ValidadorParqueaderoService validadorParqueaderoService;
 
 	@Autowired
-	private CarroService carroService;
+	private VehiculoService<CarroDTO> carroService;
 
 	@Autowired
-	private MotoService motoService;
+	private VehiculoService<MotoDTO> motoService;
 
 	@Autowired
 	private ParqueaderoCarroService parqueaderoCarroService;
@@ -57,13 +60,13 @@ public class VigilanteServiceImpl implements VigilanteService {
 	}
 
 	private String guardarParqueaderoCarro(String placa, LocalDateTime fechaIngreso) {
-		Carro carro = carroService.obtenerCarro(placa);
+		CarroDTO carro = carroService.buscarVehiculoPorPlaca(placa);
 
 		if (carro == null) {
-			carro = carroService.guardarCarro(new Carro(placa));
+			carro = carroService.guardarVehiculo(new CarroDTO(placa));
 		}
 
-		parqueaderoCarroService.guardarParqueaderoCarro(new ParqueaderoCarro(carro, fechaIngreso));
+		//parqueaderoCarroService.guardarParqueaderoCarro(new ParqueaderoCarro(carro, fechaIngreso));
 
 		return "Carro registrado en el parqueadero";
 	}
@@ -95,13 +98,13 @@ public class VigilanteServiceImpl implements VigilanteService {
 	}
 
 	private String guardarParqueaderoMoto(String placa, int cilindraje, LocalDateTime fechaIngreso) {
-		Moto moto = motoService.obtenerMoto(placa);
+		MotoDTO moto = motoService.buscarVehiculoPorPlaca(placa);
 
 		if (moto == null) {
-			moto = motoService.guardarMoto(new Moto(placa, cilindraje));
+			moto = motoService.guardarVehiculo(new MotoDTO(placa, cilindraje));
 		}
 
-		parqueaderoMotoService.guardarParqueaderoMoto(new ParqueaderoMoto(moto, fechaIngreso));
+		//parqueaderoMotoService.guardarParqueaderoMoto(new ParqueaderoMoto(moto, fechaIngreso));
 
 		return "Moto registrada en el parqueadero";
 	}
@@ -130,7 +133,7 @@ public class VigilanteServiceImpl implements VigilanteService {
 	}
 
 	private ParqueaderoCarro obtenerCarroParqueado(String placa) {
-		Carro carro = carroService.obtenerCarro(placa);
+		CarroDTO carro = carroService.buscarVehiculoPorPlaca(placa);
 		return parqueaderoCarroService.obtenerCarroParqueado(carro);
 	}
 
@@ -162,7 +165,7 @@ public class VigilanteServiceImpl implements VigilanteService {
 	}
 
 	private ParqueaderoMoto obtenerMotoParqueada(String placa) {
-		Moto moto = motoService.obtenerMoto(placa);
+		MotoDTO moto = motoService.buscarVehiculoPorPlaca(placa);
 		return parqueaderoMotoService.obtenerMotoParqueada(moto);
 	}
 

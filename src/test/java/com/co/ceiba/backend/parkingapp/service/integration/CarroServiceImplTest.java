@@ -9,35 +9,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.co.ceiba.backend.parkingapp.domain.Carro;
-import com.co.ceiba.backend.parkingapp.service.CarroService;
+import com.co.ceiba.backend.parkingapp.dto.CarroDTO;
+import com.co.ceiba.backend.parkingapp.service.VehiculoService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class CarroServiceImplTest {
 
 	@Autowired
-	private CarroService carroService;
+	private VehiculoService<CarroDTO> carroService;
 
 	@Test
-	public void guardarCarro() {
+	public void Test1guardarCarro() {
 		// Arrange
-		Carro carro = aCarro().build();
+		CarroDTO carro = aCarro().build();
 
 		// Act
-		Carro carroAgregado = carroService.guardarCarro(carro);
+		CarroDTO carroAgregado = carroService.guardarVehiculo(carro);
 
 		// Assert
 		assertEquals(carro.getPlaca(), carroAgregado.getPlaca());
 	}
 
 	@Test
-	public void obtenerCarro() {
+	public void Test2obtenerCarro() {
 		// Arrange
-		Carro carroAgregado = carroService.guardarCarro(aCarro().build());
+		CarroDTO carro = aCarro().build();
 
 		// Act
-		Carro carroObtenido = carroService.obtenerCarro(carroAgregado.getPlaca());
+		CarroDTO carroAgregado = carroService.guardarVehiculo(carro);
+		CarroDTO carroObtenido = carroService.buscarVehiculoPorPlaca(carroAgregado.getPlaca());
 
 		// Assert
 		assertEquals(carroAgregado.getPlaca(), carroObtenido.getPlaca());

@@ -9,23 +9,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.co.ceiba.backend.parkingapp.domain.Moto;
-import com.co.ceiba.backend.parkingapp.service.MotoService;
+import com.co.ceiba.backend.parkingapp.dto.MotoDTO;
+import com.co.ceiba.backend.parkingapp.service.VehiculoService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class MotoServiceImplTest {
 
 	@Autowired
-	private MotoService motoService;
+	private VehiculoService<MotoDTO> motoService;
 
 	@Test
 	public void guardarMotoTest() {
 		// Arrange
-		Moto moto = aMoto().build();
+		MotoDTO moto = aMoto().build();
 
 		// Act
-		Moto motoAgregado = motoService.guardarMoto(moto);
+		MotoDTO motoAgregado = motoService.guardarVehiculo(moto);
 
 		// Assert
 		assertEquals(moto.getPlaca(), motoAgregado.getPlaca());
@@ -36,10 +36,11 @@ public class MotoServiceImplTest {
 	@Test
 	public void obtenerMoto() {
 		// Arrange
-		Moto motoAgregado = motoService.guardarMoto(aMoto().build());
+		MotoDTO moto = aMoto().build();
 
 		// Act
-		Moto motoObtenido = motoService.obtenerMoto(motoAgregado.getPlaca());
+		MotoDTO motoAgregado = motoService.guardarVehiculo(moto);
+		MotoDTO motoObtenido = motoService.buscarVehiculoPorPlaca(motoAgregado.getPlaca());
 
 		// Assert
 		assertEquals(motoAgregado.getPlaca(), motoObtenido.getPlaca());

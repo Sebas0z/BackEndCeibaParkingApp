@@ -1,6 +1,6 @@
 package com.co.ceiba.backend.parkingapp.databuilder;
 
-import com.co.ceiba.backend.parkingapp.domain.Carro;
+import com.co.ceiba.backend.parkingapp.dto.CarroDTO;
 
 public class CarroTestDataBuilder {
 	
@@ -15,8 +15,8 @@ public class CarroTestDataBuilder {
 		return this;
 	}
 	
-	public Carro build() {
-		return new Carro(placa);
+	public CarroDTO build() {
+		return new CarroDTO(placa);
 	}
 	
 	public static CarroTestDataBuilder aCarro() {
