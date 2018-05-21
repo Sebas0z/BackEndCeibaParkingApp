@@ -65,7 +65,7 @@ public class VigilanteRestControllerTest {
 	public void cobrarRetiroCarro() throws Exception {
 		// Arrange
 		CarroDTO carro = aCarroDTO().build();
-		Mockito.when(vigilanteService.cobrarRetiroCarro(Mockito.anyString(), Mockito.any())).thenReturn("11000");
+		Mockito.when(vigilanteService.cobrarRetiroVehiculo(Mockito.anyString(), Mockito.any())).thenReturn("11000");
 
 		// Act & Assert
 		mockMvc.perform(get("/vigilante/cobrarRetiroCarro").param(PLACA, carro.getPlaca())).andDo(print())
@@ -76,7 +76,7 @@ public class VigilanteRestControllerTest {
 	public void cobrarRetiroMoto() throws Exception {
 		// Arrange
 		MotoDTO moto = aMotoDTO().build();
-		Mockito.when(vigilanteService.cobrarRetiroMoto(Mockito.anyString(), Mockito.any())).thenReturn("6000");
+		//Mockito.when(vigilanteService.cobrarRetiroMoto(Mockito.anyString(), Mockito.any())).thenReturn("6000");
 
 		// Act & Assert
 		mockMvc.perform(get("/vigilante/cobrarRetiroMoto").param(PLACA, moto.getPlaca())).andDo(print())

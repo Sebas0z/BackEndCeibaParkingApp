@@ -14,6 +14,7 @@ import com.co.ceiba.backend.parkingapp.domain.Moto;
 import com.co.ceiba.backend.parkingapp.domain.ParqueaderoCarro;
 import com.co.ceiba.backend.parkingapp.domain.ParqueaderoMoto;
 import com.co.ceiba.backend.parkingapp.dto.CarroDTO;
+import com.co.ceiba.backend.parkingapp.dto.CeldaParqueaderoDTO;
 import com.co.ceiba.backend.parkingapp.dto.MotoDTO;
 
 @Service("vigilanteService")
@@ -34,6 +35,12 @@ public class VigilanteServiceImpl implements VigilanteService {
 	@Autowired
 	private ParqueaderoMotoService parqueaderoMotoService;
 
+	@Autowired
+	private CobrarService cobrarService;
+
+	@Autowired
+	private CeldaParqueaderoService celdaParqueaderoService;
+
 	@Override
 	public String validarYRegistrarIngresoCarro(String placa, LocalDateTime fechaIngreso) {
 		Assert.notNull(placa, "La placa no debe ser nulo");
@@ -41,17 +48,17 @@ public class VigilanteServiceImpl implements VigilanteService {
 
 		ParqueaderoCarro[] arregloParqueaderoCarro = obtenerCarrosParqueados();
 
-		/*if (validadorParqueaderoService.validarSiHayEspacioParaVehiculo(arregloParqueaderoCarro)) {
-			if (!validadorParqueaderoService.validarCondicionPlaca(placa)) {
-				return guardarParqueaderoCarro(placa, fechaIngreso);
-			} else if (validadorParqueaderoService.validarCondicionDiaSegunDiasDeLaSemana(fechaIngreso)) {
-				return guardarParqueaderoCarro(placa, fechaIngreso);
-			} else {
-				return "El carro con placa " + placa + " no esta autorizado para ingresar al parqueadero";
-			}
-		} else {
-			return "No hay mas espacio para carros en el parqueadero";
-		}*/
+		/*
+		 * if (validadorParqueaderoService.validarSiHayEspacioParaVehiculo(
+		 * arregloParqueaderoCarro)) { if
+		 * (!validadorParqueaderoService.validarCondicionPlaca(placa)) { return
+		 * guardarParqueaderoCarro(placa, fechaIngreso); } else if
+		 * (validadorParqueaderoService.validarCondicionDiaSegunDiasDeLaSemana(
+		 * fechaIngreso)) { return guardarParqueaderoCarro(placa, fechaIngreso); } else
+		 * { return "El carro con placa " + placa +
+		 * " no esta autorizado para ingresar al parqueadero"; } } else { return
+		 * "No hay mas espacio para carros en el parqueadero"; }
+		 */
 		return null;
 	}
 
@@ -67,7 +74,8 @@ public class VigilanteServiceImpl implements VigilanteService {
 			carro = carroService.guardarVehiculo(new CarroDTO(placa));
 		}
 
-		//parqueaderoCarroService.guardarParqueaderoCarro(new ParqueaderoCarro(carro, fechaIngreso));
+		// parqueaderoCarroService.guardarParqueaderoCarro(new ParqueaderoCarro(carro,
+		// fechaIngreso));
 
 		return "Carro registrado en el parqueadero";
 	}
@@ -80,17 +88,17 @@ public class VigilanteServiceImpl implements VigilanteService {
 
 		ParqueaderoMoto[] arregloParqueaderoMoto = obtenerMotosParqueadas();
 
-		/*if (validadorParqueaderoService.validarSiHayEspacioParaMoto(arregloParqueaderoMoto)) {
-			if (!validadorParqueaderoService.validarCondicionPlaca(placa)) {
-				return guardarParqueaderoMoto(placa, cilindraje, fechaIngreso);
-			} else if (validadorParqueaderoService.validarCondicionDiaSegunDiasDeLaSemana(fechaIngreso)) {
-				return guardarParqueaderoMoto(placa, cilindraje, fechaIngreso);
-			} else {
-				return "La moto con placa " + placa + " no esta autorizado para ingresar al parqueadero";
-			}
-		} else {
-			return "No hay mas espacio para motos en el parqueadero";
-		}*/
+		/*
+		 * if (validadorParqueaderoService.validarSiHayEspacioParaMoto(
+		 * arregloParqueaderoMoto)) { if
+		 * (!validadorParqueaderoService.validarCondicionPlaca(placa)) { return
+		 * guardarParqueaderoMoto(placa, cilindraje, fechaIngreso); } else if
+		 * (validadorParqueaderoService.validarCondicionDiaSegunDiasDeLaSemana(
+		 * fechaIngreso)) { return guardarParqueaderoMoto(placa, cilindraje,
+		 * fechaIngreso); } else { return "La moto con placa " + placa +
+		 * " no esta autorizado para ingresar al parqueadero"; } } else { return
+		 * "No hay mas espacio para motos en el parqueadero"; }
+		 */
 		return null;
 	}
 
@@ -106,15 +114,29 @@ public class VigilanteServiceImpl implements VigilanteService {
 			moto = motoService.guardarVehiculo(new MotoDTO(placa, cilindraje));
 		}
 
-		//parqueaderoMotoService.guardarParqueaderoMoto(new ParqueaderoMoto(moto, fechaIngreso));
+		// parqueaderoMotoService.guardarParqueaderoMoto(new ParqueaderoMoto(moto,
+		// fechaIngreso));
 
 		return "Moto registrada en el parqueadero";
 	}
 
 	@Override
-	public String cobrarRetiroCarro(String placa, LocalDateTime fechaRetiro) {
-		Assert.notNull(placa, "La placa no debe ser nulo");
-		Assert.notNull(fechaRetiro, "La fecha de retiro no debe ser nulo");
+	public String cobrarRetiroVehiculo(String placa, LocalDateTime fechaRetiro) {
+
+		List<CeldaParqueaderoDTO> listCeldaParqueaderoDTO = celdaParqueaderoService.buscarVehiculosParqueados();
+
+		CeldaParqueaderoDTO celdaParqueaderoDTO = listCeldaParqueaderoDTO.stream()
+				.filter(p -> (p.getCarro().getPlaca() == placa) || (p.getMoto().getPlaca() == placa)).findAny()
+				.orElse(null);
+		
+		if (celdaParqueaderoDTO == null) {
+			//throw new Exception("No existe vehiculo con esa placa");
+		}
+		
+		celdaParqueaderoDTO.setFechaRetiro(fechaRetiro);
+
+		//int cobroValorTotal = cobrarService.calcularValorRetiroVehiculo(celdaParqueaderoDTO, valorHora, valorDia,
+			//	minHorasValorHora, maximoCilindraje, valorImpuestoCilindraje);
 
 		ParqueaderoCarro parqueaderoCarro = obtenerCarroParqueado(placa);
 
@@ -137,38 +159,6 @@ public class VigilanteServiceImpl implements VigilanteService {
 	private ParqueaderoCarro obtenerCarroParqueado(String placa) {
 		CarroDTO carro = carroService.buscarVehiculoPorPlaca(placa);
 		return parqueaderoCarroService.obtenerCarroParqueado(carro);
-	}
-
-	@Override
-	public String cobrarRetiroMoto(String placa, LocalDateTime fechaRetiro) {
-		Assert.notNull(placa, "La placa no debe ser nulo");
-		Assert.notNull(fechaRetiro, "La fecha de retiro no debe ser nulo");
-
-		ParqueaderoMoto parqueaderoMoto = obtenerMotoParqueada(placa);
-
-		double diferencia = (double) ChronoUnit.HOURS.between(parqueaderoMoto.getFechaIngreso(), fechaRetiro);
-		double diferenciaHoras = diferencia < 1 ? 1 : diferencia;
-		double dias = Math.floor(diferenciaHoras / 24);
-		double horas = ((diferenciaHoras / 24) % 1) * 24;
-
-		double valorTotalDias = dias * 4000;
-		double valorTotalHoras = horas < 9 ? horas * 500 : 4000;
-		double valorTotal = valorTotalDias + valorTotalHoras;
-
-		if (parqueaderoMoto.getMoto().getCilindraje() > 500) {
-			valorTotal += 2000;
-		}
-
-		parqueaderoMoto.setFechaRetiro(fechaRetiro);
-
-		parqueaderoMotoService.guardarParqueaderoMoto(parqueaderoMoto);
-
-		return Integer.toString((int) valorTotal);
-	}
-
-	private ParqueaderoMoto obtenerMotoParqueada(String placa) {
-		MotoDTO moto = motoService.buscarVehiculoPorPlaca(placa);
-		return parqueaderoMotoService.obtenerMotoParqueada(moto);
 	}
 
 }

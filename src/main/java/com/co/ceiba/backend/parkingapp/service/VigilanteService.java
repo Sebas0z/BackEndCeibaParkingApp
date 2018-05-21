@@ -8,8 +8,6 @@ public interface VigilanteService {
 
 	public String validarYRegistrarIngresoMoto(String placa, int cilindraje, LocalDateTime fechaIngreso);
 
-	public String cobrarRetiroCarro(String placa, LocalDateTime fechaRetiro);
-
-	public String cobrarRetiroMoto(String placa, LocalDateTime fechaRetiro);
+	public String cobrarRetiroVehiculo(String placa, LocalDateTime fechaRetiro);
 
 }

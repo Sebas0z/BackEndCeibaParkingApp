@@ -29,12 +29,12 @@ public class VigilanteRestController {
 
 	@GetMapping("cobrarRetiroCarro")
 	public String cobrarRetiroCarro(@RequestParam String placa) {
-		return vigilanteService.cobrarRetiroCarro(placa, LocalDateTime.now());
+		return vigilanteService.cobrarRetiroVehiculo(placa, LocalDateTime.now());
 	}
 
 	@GetMapping("cobrarRetiroMoto")
 	public String cobrarRetiroMoto(@RequestParam String placa) {
-		return vigilanteService.cobrarRetiroMoto(placa, LocalDateTime.now());
+		return "";//vigilanteService.cobrarRetiroMoto(placa, LocalDateTime.now());
 	}
 
 }
