@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Parqueadero {
+public class CeldaParqueadero {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,19 +27,11 @@ public class Parqueadero {
 	@ManyToOne
 	private Moto moto;
 
-	protected Parqueadero() {
+	protected CeldaParqueadero() {
 	}
 
-	public Parqueadero(LocalDateTime fechaIngreso) {
+	public CeldaParqueadero(LocalDateTime fechaIngreso) {
 		this.fechaIngreso = fechaIngreso;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public LocalDateTime getFechaIngreso() {

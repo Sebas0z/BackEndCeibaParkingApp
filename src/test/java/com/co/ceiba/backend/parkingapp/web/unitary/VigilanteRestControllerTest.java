@@ -1,7 +1,7 @@
 package com.co.ceiba.backend.parkingapp.web.unitary;
 
-import static com.co.ceiba.backend.parkingapp.databuilder.CarroTestDataBuilder.aCarro;
-import static com.co.ceiba.backend.parkingapp.databuilder.MotoTestDataBuilder.aMoto;
+import static com.co.ceiba.backend.parkingapp.databuilder.CarroDTOTestDataBuilder.aCarroDTO;
+import static com.co.ceiba.backend.parkingapp.databuilder.MotoDTOTestDataBuilder.aMotoDTO;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -38,7 +38,7 @@ public class VigilanteRestControllerTest {
 	@Test
 	public void ingresarCarro() throws Exception {
 		// Arrange
-		CarroDTO carro = aCarro().build();
+		CarroDTO carro = aCarroDTO().build();
 		Mockito.when(vigilanteService.validarYRegistrarIngresoCarro(Mockito.anyString(), Mockito.any()))
 				.thenReturn("Carro registrado en el parqueadero");
 
@@ -50,7 +50,7 @@ public class VigilanteRestControllerTest {
 	@Test
 	public void ingresarMoto() throws Exception {
 		// Arrange
-		MotoDTO moto = aMoto().build();
+		MotoDTO moto = aMotoDTO().build();
 		Mockito.when(
 				vigilanteService.validarYRegistrarIngresoMoto(Mockito.anyString(), Mockito.anyInt(), Mockito.any()))
 				.thenReturn("Moto registrada en el parqueadero");
@@ -64,7 +64,7 @@ public class VigilanteRestControllerTest {
 	@Test
 	public void cobrarRetiroCarro() throws Exception {
 		// Arrange
-		CarroDTO carro = aCarro().build();
+		CarroDTO carro = aCarroDTO().build();
 		Mockito.when(vigilanteService.cobrarRetiroCarro(Mockito.anyString(), Mockito.any())).thenReturn("11000");
 
 		// Act & Assert
@@ -75,7 +75,7 @@ public class VigilanteRestControllerTest {
 	@Test
 	public void cobrarRetiroMoto() throws Exception {
 		// Arrange
-		MotoDTO moto = aMoto().build();
+		MotoDTO moto = aMotoDTO().build();
 		Mockito.when(vigilanteService.cobrarRetiroMoto(Mockito.anyString(), Mockito.any())).thenReturn("6000");
 
 		// Act & Assert

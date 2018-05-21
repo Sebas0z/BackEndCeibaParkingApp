@@ -20,7 +20,7 @@ import com.co.ceiba.backend.parkingapp.dto.MotoDTO;
 public class VigilanteServiceImpl implements VigilanteService {
 
 	@Autowired
-	private ValidadorParqueaderoService validadorParqueaderoService;
+	private ValidadorService validadorParqueaderoService;
 
 	@Autowired
 	private VehiculoService<CarroDTO> carroService;
@@ -41,17 +41,18 @@ public class VigilanteServiceImpl implements VigilanteService {
 
 		ParqueaderoCarro[] arregloParqueaderoCarro = obtenerCarrosParqueados();
 
-		if (validadorParqueaderoService.validarSiHayEspacioParaCarro(arregloParqueaderoCarro)) {
+		/*if (validadorParqueaderoService.validarSiHayEspacioParaVehiculo(arregloParqueaderoCarro)) {
 			if (!validadorParqueaderoService.validarCondicionPlaca(placa)) {
 				return guardarParqueaderoCarro(placa, fechaIngreso);
-			} else if (validadorParqueaderoService.validarCondicionDia(fechaIngreso)) {
+			} else if (validadorParqueaderoService.validarCondicionDiaSegunDiasDeLaSemana(fechaIngreso)) {
 				return guardarParqueaderoCarro(placa, fechaIngreso);
 			} else {
 				return "El carro con placa " + placa + " no esta autorizado para ingresar al parqueadero";
 			}
 		} else {
 			return "No hay mas espacio para carros en el parqueadero";
-		}
+		}*/
+		return null;
 	}
 
 	private ParqueaderoCarro[] obtenerCarrosParqueados() {
@@ -79,17 +80,18 @@ public class VigilanteServiceImpl implements VigilanteService {
 
 		ParqueaderoMoto[] arregloParqueaderoMoto = obtenerMotosParqueadas();
 
-		if (validadorParqueaderoService.validarSiHayEspacioParaMoto(arregloParqueaderoMoto)) {
+		/*if (validadorParqueaderoService.validarSiHayEspacioParaMoto(arregloParqueaderoMoto)) {
 			if (!validadorParqueaderoService.validarCondicionPlaca(placa)) {
 				return guardarParqueaderoMoto(placa, cilindraje, fechaIngreso);
-			} else if (validadorParqueaderoService.validarCondicionDia(fechaIngreso)) {
+			} else if (validadorParqueaderoService.validarCondicionDiaSegunDiasDeLaSemana(fechaIngreso)) {
 				return guardarParqueaderoMoto(placa, cilindraje, fechaIngreso);
 			} else {
 				return "La moto con placa " + placa + " no esta autorizado para ingresar al parqueadero";
 			}
 		} else {
 			return "No hay mas espacio para motos en el parqueadero";
-		}
+		}*/
+		return null;
 	}
 
 	private ParqueaderoMoto[] obtenerMotosParqueadas() {

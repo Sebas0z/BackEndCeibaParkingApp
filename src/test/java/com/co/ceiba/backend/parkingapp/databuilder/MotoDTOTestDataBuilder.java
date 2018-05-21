@@ -2,22 +2,22 @@ package com.co.ceiba.backend.parkingapp.databuilder;
 
 import com.co.ceiba.backend.parkingapp.dto.MotoDTO;
 
-public class MotoTestDataBuilder {
+public class MotoDTOTestDataBuilder {
 
 	private String placa;
 	private int cilindraje;
 
-	public MotoTestDataBuilder() {
+	public MotoDTOTestDataBuilder() {
 		placa = "HUV11P";
 		cilindraje = 150;
 	}
 
-	public MotoTestDataBuilder withPlaca(String placa) {
+	public MotoDTOTestDataBuilder withPlaca(String placa) {
 		this.placa = placa;
 		return this;
 	}
 
-	public MotoTestDataBuilder withCilindraje(int cilindraje) {
+	public MotoDTOTestDataBuilder withCilindraje(int cilindraje) {
 		this.cilindraje = cilindraje;
 		return this;
 	}
@@ -26,8 +26,8 @@ public class MotoTestDataBuilder {
 		return new MotoDTO(placa, cilindraje);
 	}
 
-	public static MotoTestDataBuilder aMoto() {
-		return new MotoTestDataBuilder();
+	public static MotoDTOTestDataBuilder aMotoDTO() {
+		return new MotoDTOTestDataBuilder();
 	}
 
 }

@@ -2,27 +2,18 @@ package com.co.ceiba.backend.parkingapp.dto;
 
 import java.time.LocalDateTime;
 
-public class ParqueaderoDTO {
+public class CeldaParqueaderoDTO {
 
-	private Long id;
 	private LocalDateTime fechaIngreso;
 	private LocalDateTime fechaRetiro;
-	private CarroDTO carroDTO;
-	private MotoDTO motoDTO;
+	private CarroDTO carro;
+	private MotoDTO moto;
 
-	protected ParqueaderoDTO() {
+	protected CeldaParqueaderoDTO() {
 	}
 
-	public ParqueaderoDTO(LocalDateTime fechaIngreso) {
+	public CeldaParqueaderoDTO(LocalDateTime fechaIngreso) {
 		this.fechaIngreso = fechaIngreso;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public LocalDateTime getFechaIngreso() {
@@ -41,20 +32,20 @@ public class ParqueaderoDTO {
 		this.fechaRetiro = fechaRetiro;
 	}
 
-	public CarroDTO getCarroDTO() {
-		return carroDTO;
+	public CarroDTO getCarro() {
+		return carro;
 	}
 
-	public void setCarroDTO(CarroDTO carroDTO) {
-		this.carroDTO = carroDTO;
+	public void setCarro(CarroDTO carro) {
+		this.carro = carro;
 	}
 
-	public MotoDTO getMotoDTO() {
-		return motoDTO;
+	public MotoDTO getMoto() {
+		return moto;
 	}
 
-	public void setMotoDTO(MotoDTO motoDTO) {
-		this.motoDTO = motoDTO;
+	public void setMoto(MotoDTO moto) {
+		this.moto = moto;
 	}
 
 }

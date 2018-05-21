@@ -1,6 +1,6 @@
 package com.co.ceiba.backend.parkingapp.service.integration;
 
-import static com.co.ceiba.backend.parkingapp.databuilder.CarroTestDataBuilder.aCarro;
+import static com.co.ceiba.backend.parkingapp.databuilder.CarroDTOTestDataBuilder.aCarroDTO;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -22,7 +22,7 @@ public class CarroServiceImplTest {
 	@Test
 	public void Test1guardarCarro() {
 		// Arrange
-		CarroDTO carro = aCarro().build();
+		CarroDTO carro = aCarroDTO().build();
 
 		// Act
 		CarroDTO carroAgregado = carroService.guardarVehiculo(carro);
@@ -34,7 +34,7 @@ public class CarroServiceImplTest {
 	@Test
 	public void Test2obtenerCarro() {
 		// Arrange
-		CarroDTO carro = aCarro().build();
+		CarroDTO carro = aCarroDTO().build();
 
 		// Act
 		CarroDTO carroAgregado = carroService.guardarVehiculo(carro);

@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class ParqueaderoCarro extends Parqueadero {
+public class ParqueaderoCarro extends CeldaParqueadero {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

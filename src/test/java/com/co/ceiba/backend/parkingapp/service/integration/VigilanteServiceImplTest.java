@@ -1,7 +1,7 @@
 package com.co.ceiba.backend.parkingapp.service.integration;
 
-import static com.co.ceiba.backend.parkingapp.databuilder.CarroTestDataBuilder.aCarro;
-import static com.co.ceiba.backend.parkingapp.databuilder.MotoTestDataBuilder.aMoto;
+import static com.co.ceiba.backend.parkingapp.databuilder.CarroDTOTestDataBuilder.aCarroDTO;
+import static com.co.ceiba.backend.parkingapp.databuilder.MotoDTOTestDataBuilder.aMotoDTO;
 import static com.co.ceiba.backend.parkingapp.databuilder.ParqueaderoCarroTestDataBuilder.aParqueaderoCarro;
 import static com.co.ceiba.backend.parkingapp.databuilder.ParqueaderoMotoTestDataBuilder.aParqueaderoMoto;
 import static org.junit.Assert.assertEquals;
@@ -150,7 +150,7 @@ public class VigilanteServiceImplTest {
 	@Test
 	public void Test17ValidarYRegistrarIngresoCarroSinEspacioTest() {
 		// Arrange
-		CarroDTO carro = carroService.guardarVehiculo(aCarro().build());
+		CarroDTO carro = carroService.guardarVehiculo(aCarroDTO().build());
 
 		for (int i = 3; i <= MAXIMA_CANTIDAD_CARROS; i++) {
 			ParqueaderoCarro parqueaderoCarro = aParqueaderoCarro().withCarro(carro).build();
@@ -269,7 +269,7 @@ public class VigilanteServiceImplTest {
 	@Test
 	public void Test28ValidarYRegistrarIngresoMotoSinEspacioTest() {
 		// Arrange
-		MotoDTO moto = motoService.guardarVehiculo(aMoto().build());
+		MotoDTO moto = motoService.guardarVehiculo(aMotoDTO().build());
 
 		for (int i = 3; i <= 20; i++) {
 			ParqueaderoMoto parqueaderoMoto = aParqueaderoMoto().withMoto(moto).build();

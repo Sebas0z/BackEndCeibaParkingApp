@@ -1,6 +1,5 @@
 package com.co.ceiba.backend.parkingapp.service;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,18 +13,20 @@ public class CarroServiceImpl implements VehiculoService<CarroDTO> {
 	@Autowired
 	private CarroRepository carroRepository;
 
-	private ModelMapper modelMapper = new ModelMapper();
+	@Autowired
+	private UtilMapperService utilMapperService;
 
 	@Override
 	public CarroDTO guardarVehiculo(CarroDTO carroDTO) {
-		Carro carro = carroRepository.save(modelMapper.map(carroDTO, Carro.class));
-		return modelMapper.map(carro, CarroDTO.class);
+		Carro carro = utilMapperService.convertirDeClase1aClase2(carroDTO, CarroDTO.class, Carro.class);
+		Carro carroGuardado = carroRepository.save(carro);
+		return utilMapperService.convertirDeClase1aClase2(carroGuardado, Carro.class, CarroDTO.class);
 	}
 
 	@Override
 	public CarroDTO buscarVehiculoPorPlaca(String placa) {
 		Carro carro = carroRepository.findByPlaca(placa);
-		return modelMapper.map(carro, CarroDTO.class);
+		return utilMapperService.convertirDeClase1aClase2(carro, Carro.class, CarroDTO.class);
 	}
 
 }

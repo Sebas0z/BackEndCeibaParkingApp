@@ -2,15 +2,15 @@ package com.co.ceiba.backend.parkingapp.databuilder;
 
 import com.co.ceiba.backend.parkingapp.dto.CarroDTO;
 
-public class CarroTestDataBuilder {
+public class CarroDTOTestDataBuilder {
 	
 	private String placa;
 	
-	public CarroTestDataBuilder() {
+	public CarroDTOTestDataBuilder() {
 		placa = "COT18S";
 	}
 	
-	public CarroTestDataBuilder withPlaca(String placa) {
+	public CarroDTOTestDataBuilder withPlaca(String placa) {
 		this.placa = placa;
 		return this;
 	}
@@ -19,8 +19,8 @@ public class CarroTestDataBuilder {
 		return new CarroDTO(placa);
 	}
 	
-	public static CarroTestDataBuilder aCarro() {
-		return new CarroTestDataBuilder();
+	public static CarroDTOTestDataBuilder aCarroDTO() {
+		return new CarroDTOTestDataBuilder();
 	}
 	
 }
