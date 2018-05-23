@@ -5,6 +5,6 @@ import com.co.ceiba.backend.parkingapp.dto.CeldaParqueaderoDTO;
 public interface CobrarService {
 
 	int calcularValorRetiroVehiculo(CeldaParqueaderoDTO celdaParqueaderoDTO, double valorHora, double valorDia,
-			int minHorasValorHora, int maximoCilindraje, double valorImpuestoCilindraje);
+			int maxHorasValorHora, int maximoCilindraje, int valorImpuestoCilindraje);
 
 }

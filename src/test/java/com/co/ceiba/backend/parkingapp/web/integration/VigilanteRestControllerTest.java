@@ -24,29 +24,31 @@ public class VigilanteRestControllerTest {
 	@Test
 	public void ingresarCarro() throws Exception {
 		// Arrange & Act & Assert
-		assertThat(this.restTemplate
-				.getForObject(("http://localhost:" + port + "/vigilante/ingresarCarro?placa=COX13N"), String.class))
-						.contains("Carro registrado en el parqueadero");
+		assertThat(this.restTemplate.getForObject(
+				("http://localhost:" + port + "/vigilante/registrarIngresoVehiculo?placa=COX13N"), String.class))
+						.contains("Vehiculo registrado en el parqueadero");
 	}
 
 	@Test
 	public void ingresarMoto() throws Exception {
 		// Arrange & Act & Assert
 		assertThat(this.restTemplate.getForObject(
-				("http://localhost:" + port + "/vigilante/ingresarMoto?placa=ZOM12H&cilindraje=125"), String.class))
-						.contains("Moto registrada en el parqueadero");
+				("http://localhost:" + port + "/vigilante/registrarIngresoVehiculo?placa=ZOM12H&cilindraje=125"),
+				String.class)).contains("Vehiculo registrado en el parqueadero");
 	}
 
 	@Test
 	public void cobrarRetiroCarro() throws Exception {
 		// Arrange
-		assertThat(this.restTemplate
-				.getForObject(("http://localhost:" + port + "/vigilante/ingresarCarro?placa=MAT07Z"), String.class))
-						.contains("Carro registrado en el parqueadero");
+		assertThat(this.restTemplate.getForObject(
+				("http://localhost:" + port + "/vigilante/registrarIngresoVehiculo?placa=MAT07Z"), String.class))
+						.contains("Vehiculo registrado en el parqueadero");
+
+		Thread.sleep(15000);
 
 		// Act & Assert
-		assertThat(this.restTemplate
-				.getForObject(("http://localhost:" + port + "/vigilante/cobrarRetiroCarro?placa=MAT07Z"), String.class))
+		assertThat(this.restTemplate.getForObject(
+				("http://localhost:" + port + "/vigilante/cobrarRetiroVehiculo?placa=MAT07Z"), String.class))
 						.contains("1000");
 	}
 
@@ -54,12 +56,14 @@ public class VigilanteRestControllerTest {
 	public void cobrarRetiroMoto() throws Exception {
 		// Arrange
 		assertThat(this.restTemplate.getForObject(
-				("http://localhost:" + port + "/vigilante/ingresarMoto?placa=KAP33U&cilindraje=125"), String.class))
-						.contains("Moto registrada en el parqueadero");
+				("http://localhost:" + port + "/vigilante/registrarIngresoVehiculo?placa=KAP33U&cilindraje=125"),
+				String.class)).contains("Vehiculo registrado en el parqueadero");
+
+		Thread.sleep(15000);
 
 		// Act & Assert
-		assertThat(this.restTemplate
-				.getForObject(("http://localhost:" + port + "/vigilante/cobrarRetiroMoto?placa=AAP33U"), String.class))
+		assertThat(this.restTemplate.getForObject(
+				("http://localhost:" + port + "/vigilante/cobrarRetiroVehiculo?placa=AAP33U"), String.class))
 						.contains("500");
 
 	}

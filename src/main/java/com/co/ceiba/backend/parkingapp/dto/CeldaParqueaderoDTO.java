@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public class CeldaParqueaderoDTO {
 
+	private Long id;
 	private LocalDateTime fechaIngreso;
 	private LocalDateTime fechaRetiro;
 	private CarroDTO carro;
@@ -14,6 +15,14 @@ public class CeldaParqueaderoDTO {
 
 	public CeldaParqueaderoDTO(LocalDateTime fechaIngreso) {
 		this.fechaIngreso = fechaIngreso;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public LocalDateTime getFechaIngreso() {

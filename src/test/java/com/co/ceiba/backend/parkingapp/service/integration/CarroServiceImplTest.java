@@ -20,7 +20,7 @@ public class CarroServiceImplTest {
 	private VehiculoService<CarroDTO> carroService;
 
 	@Test
-	public void Test1guardarCarro() {
+	public void guardarCarro() {
 		// Arrange
 		CarroDTO carro = aCarroDTO().build();
 
@@ -32,9 +32,9 @@ public class CarroServiceImplTest {
 	}
 
 	@Test
-	public void Test2obtenerCarro() {
+	public void obtenerCarro() {
 		// Arrange
-		CarroDTO carro = aCarroDTO().build();
+		CarroDTO carro = new CarroDTO("LLOPZIU");
 
 		// Act
 		CarroDTO carroAgregado = carroService.guardarVehiculo(carro);

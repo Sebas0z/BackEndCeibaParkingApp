@@ -17,24 +17,14 @@ public class VigilanteRestController {
 	@Autowired
 	private VigilanteService vigilanteService;
 
-	@GetMapping("ingresarCarro")
-	public String ingresarCarro(@RequestParam String placa) {
-		return vigilanteService.validarYRegistrarIngresoCarro(placa, LocalDateTime.now());
+	@GetMapping("registrarIngresoVehiculo")
+	public String ingresarMoto(@RequestParam String placa, @RequestParam(defaultValue = "0") int cilindraje) {
+		return vigilanteService.registrarIngresoVehiculo(placa, cilindraje, LocalDateTime.now());
 	}
 
-	@GetMapping("ingresarMoto")
-	public String ingresarMoto(@RequestParam String placa, @RequestParam int cilindraje) {
-		return vigilanteService.validarYRegistrarIngresoMoto(placa, cilindraje, LocalDateTime.now());
-	}
-
-	@GetMapping("cobrarRetiroCarro")
+	@GetMapping("cobrarRetiroVehiculo")
 	public String cobrarRetiroCarro(@RequestParam String placa) {
 		return vigilanteService.cobrarRetiroVehiculo(placa, LocalDateTime.now());
-	}
-
-	@GetMapping("cobrarRetiroMoto")
-	public String cobrarRetiroMoto(@RequestParam String placa) {
-		return "";//vigilanteService.cobrarRetiroMoto(placa, LocalDateTime.now());
 	}
 
 }

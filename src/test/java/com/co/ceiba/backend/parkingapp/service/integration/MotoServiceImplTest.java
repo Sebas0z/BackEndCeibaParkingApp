@@ -36,7 +36,7 @@ public class MotoServiceImplTest {
 	@Test
 	public void obtenerMoto() {
 		// Arrange
-		MotoDTO moto = aMotoDTO().build();
+		MotoDTO moto = new MotoDTO("KIYQ90I", 150);
 
 		// Act
 		MotoDTO motoAgregado = motoService.guardarVehiculo(moto);

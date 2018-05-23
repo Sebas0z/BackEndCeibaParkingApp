@@ -34,6 +34,14 @@ public class CeldaParqueadero {
 		this.fechaIngreso = fechaIngreso;
 	}
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public LocalDateTime getFechaIngreso() {
 		return fechaIngreso;
 	}

@@ -11,7 +11,7 @@ public class CobrarServiceImpl implements CobrarService {
 
 	@Override
 	public int calcularValorRetiroVehiculo(CeldaParqueaderoDTO celdaParqueaderoDTO, double valorHora, double valorDia,
-			int minHorasValorHora, int maximoCilindraje, double valorImpuestoCilindraje) {
+			int maxHorasValorHora, int maximoCilindraje, int valorImpuestoCilindraje) {
 
 		double diferencia = (double) ChronoUnit.HOURS.between(celdaParqueaderoDTO.getFechaIngreso(),
 				celdaParqueaderoDTO.getFechaRetiro());
@@ -20,7 +20,7 @@ public class CobrarServiceImpl implements CobrarService {
 		double horas = ((diferenciaHoras / 24) % 1) * 24;
 
 		double valorTotalDias = dias * valorDia;
-		double valorTotalHoras = horas < minHorasValorHora ? horas * valorHora : valorDia;
+		double valorTotalHoras = horas < maxHorasValorHora ? horas * valorHora : valorDia;
 		double valorTotal = valorTotalDias + valorTotalHoras;
 
 		if ((celdaParqueaderoDTO.getMoto() != null) && (celdaParqueaderoDTO.getMoto().getCilindraje() != 0)
